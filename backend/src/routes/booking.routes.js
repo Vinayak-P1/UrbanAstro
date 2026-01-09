@@ -3,7 +3,6 @@ import { Router } from "express";
 import { protect, adminOnly } from "../middleware/auth.js";
 import {
   checkout,
-  verifyPayment,
   myBookings,
   listAll,
   uploadReport,
@@ -18,7 +17,6 @@ const router = Router();
 router.post("/checkout", protect, checkout);
 // Manual QR payment: user submits UTR after scanning QR
 router.post("/manual", protect, submitManualPayment);
-router.post("/verify", verifyPayment);
 router.get("/me", protect, myBookings);
 
 // Admin approve/disapprove

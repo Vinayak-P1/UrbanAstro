@@ -1,8 +1,6 @@
 // src/controllers/booking.controller.js
 import Booking from "../models/Booking.js";
 import Report from "../models/Report.js";
-import razorpay from "../config/razorpay.js";
-import crypto from "crypto";
 import Coupon from "../models/Coupon.js";
 import cloudinary from "cloudinary";
 import fs from "fs";
@@ -90,57 +88,20 @@ export const checkout = async (req, res) => {
       });
     }
 
-    const order = await razorpay.orders.create({
-      amount: amountPaise,
-      currency: "INR",
-      receipt: `bk_${booking._id}`,
-      notes: { bookingId: String(booking._id), userId: String(req.user._id) },
-    });
-
-    booking.orderId = order.id;
+    // Temporary payment flow: mark payment as pending and return booking
+    booking.paymentStatus = "PENDING";
     await booking.save();
 
     res.json({
-      order,
+      success: true,
       bookingId: booking._id,
       amount: amountPaise,
       promoApplied: !!couponDoc,
+      paymentStatus: booking.paymentStatus,
     });
   } catch (e) {
     console.error("CHECKOUT ERROR =>", e);
     res.status(500).json({ error: e.message });
-  }
-};
-
-// ---------------- Verify Payment ----------------
-export const verifyPayment = async (req, res) => {
-  try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
-    const secret = process.env.RAZORPAY_KEY_SECRET;
-
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
-    const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
-    if (expected !== razorpay_signature)
-      return res.status(400).json({ success: false, message: "Invalid signature" });
-
-    const booking = await Booking.findOne({ orderId: razorpay_order_id });
-    if (!booking)
-      return res.status(404).json({ success: false, message: "Booking not found" });
-
-    if (booking.coupon) {
-      await Coupon.updateOne({ code: booking.coupon }, { $inc: { remainingUses: -1 } });
-    }
-
-    booking.status = "paid";
-    booking.paymentId = razorpay_payment_id;
-    booking.signature = razorpay_signature;
-    await booking.save();
-
-    res.json({ success: true, message: "Payment verified successfully" });
-  } catch (e) {
-    console.error("VERIFY ERROR =>", e);
-    res.status(500).json({ success: false, message: e.message });
   }
 };
 

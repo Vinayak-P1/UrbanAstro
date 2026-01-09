@@ -1,19 +1,18 @@
 import express from "express";
-import {
-  createOrder,
-  verifyPayment,
-  webhook,
-} from "../controllers/payment.controller.js";
 
 const router = express.Router();
 
-// Create order
-router.post("/create-order", createOrder);
+// Payments integration removed. Endpoints kept to respond gracefully.
+router.post("/create-order", (req, res) => {
+  res.status(410).json({ success: false, message: "Payments are currently disabled." });
+});
 
-// Verify payment from frontend
-router.post("/verify", verifyPayment);
+router.post("/verify", (req, res) => {
+  res.status(410).json({ success: false, message: "Payments are currently disabled." });
+});
 
-// Razorpay webhook (set this URL in Razorpay Dashboard)
-router.post("/webhook", express.raw({ type: "application/json" }), webhook);
+router.post("/webhook", (req, res) => {
+  res.status(410).json({ success: false, message: "Payments are currently disabled." });
+});
 
 export default router;
