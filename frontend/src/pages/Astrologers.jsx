@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from "react";
+const API = import.meta.env.VITE_API_URL || "";
+
+const Astrologers = () => {
+  const [list, setList] = useState([]);
+useEffect(() => {
+  (async () => {
+    try {
+      const res = await fetch(`${API}/api/astrologers`);
+      const data = await res.json();
+      if (data.success && data.items) {
+        setList(data.items);
+      } else {
+        setList([]);
+      }
+    } catch (err) {
+      console.error("Fetch astrologers error:", err);
+    }
+  })();
+}, []);
+  return (
+    <div className="min-h-screen bg-background-dark text-white pt-24 md:pt-28 lg:pt-32 p-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center">Our Astrologers</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {list.map(a => (
+          <div key={a._id} className="p-4 bg-white/10 rounded">
+            <img src={a.imageUrl} className="w-full h-40 object-cover rounded mb-2" />
+            <div className="font-bold">{a.name}</div>
+            <div className="text-sm text-gray-300">{a.expertise} · {a.experience} yrs</div>
+            <div className="text-sm mt-1">{a.bio}</div>
+          </div>
+        ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Astrologers;

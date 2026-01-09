@@ -1,0 +1,40 @@
+import mongoose from "mongoose";
+
+const bookingSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    name: String,
+    email: String,
+    birthDate: String,
+    birthTime: String,
+    birthLocation: String,
+    unknownTime: { type: Boolean, default: false },
+    selectedLifeAreas: { type: [String], default: [] },
+    question: String,
+
+    // Pricing
+    amount: { type: Number, required: true },
+    promoApplied: { type: Boolean, default: false },
+    coupon: { type: String, default: "" },
+
+    // Payment
+    status: {
+      type: String,
+      enum: ["pending", "awaiting_verification", "paid", "inprogress", "completed", "disapproved"],
+      default: "pending",
+    },
+    orderId: String,
+    paymentId: String,
+    signature: String,
+    // Manual payment UTR / transaction id when user pays via QR/UPI
+    utr: { type: String, default: "" },
+
+    // Report linkage
+    report: { type: mongoose.Schema.Types.ObjectId, ref: "Report" },
+    // Astrologer linkage
+astrologer: { type: mongoose.Schema.Types.ObjectId, ref: "Astrologer" },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Booking", bookingSchema);

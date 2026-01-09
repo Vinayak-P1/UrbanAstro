@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+.cosmic-gradient {
+    background-image: linear-gradient(to right, #9333ea, #3b82f6, #14b8a6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.glow {
+    text-shadow: 0 0 8px rgba(147, 51, 234, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
+}
+/* ... (btn-shine, star-dust, orbit-lines ki baaki CSS yahan paste karein) ... */
+
+/* 3. Dark Mode Fix: Ensure body gets the dark background */
+body {
+    /* Using the background-dark color defined in your Tailwind config */
+    background-color: #111121; 
+    color: #f6f6f8; /* Base text color for dark mode */
+}
+@keyframes stars {
+  0% {
+    background-position: 0px 0px, 40px 60px, 130px 270px, 70px 100px;
+  }
+  100% {
+    background-position: 1000px 1000px, 1040px 1060px, 1130px 1270px, 1070px 1100px;
+  }
+}
+
+.animate-stars {
+  animation: stars 60s linear infinite;
+}
