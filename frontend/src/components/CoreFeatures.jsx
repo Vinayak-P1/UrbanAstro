@@ -22,7 +22,7 @@ const FeatureItem = ({ icon, title, description }) => (
 const CoreFeatures = () => {
     return (
         // Background ko dark/light mix rakha hai, ya poora dark kar dein
-        <section className="bg-background-dark/90 py-8 px-6"> 
+        <section className="bg-background-dark/60 md:bg-background-dark/90 py-8 px-6"> 
             <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
                 <FeatureItem 
                     icon={<VscWorkspaceTrusted className='text-sky-400'  />}

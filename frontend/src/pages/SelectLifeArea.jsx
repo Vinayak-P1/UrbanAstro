@@ -43,7 +43,7 @@ const handleProceed=()=>{
   return (
     <div className="relative flex flex-col min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background-dark to-purple-900/30 opacity-50 dark:opacity-100"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background-dark to-purple-900/30 opacity-40 dark:opacity-60 pointer-events-none"></div>
 
 <div className="relative z-10 flex flex-col flex-grow items-center justify-start pt-20 p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-lg mx-auto">

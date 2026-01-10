@@ -134,7 +134,7 @@ const Login = () => {
 
 
       {/* 🌠 Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b0b20]/90 via-[#0b0b20]/80 to-[#1b0033]/70"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0b0b20]/40 via-[#0b0b20]/30 to-[#1b0033]/20 pointer-events-none"></div>
 
       {/* Login/Signup Card */}
       <div className="relative w-full max-w-md bg-white/10 dark:bg-black/30 backdrop-blur-xl rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.6)] border border-white/10 overflow-hidden z-10">

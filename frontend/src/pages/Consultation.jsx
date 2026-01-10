@@ -35,7 +35,7 @@ const Consultation = () => {
       {/* ⭐️ 2. CONTENT CARD CONTAINER FIX ⭐️ */}
       {/* Added pt-20 to the outer wrapper to make space for the fixed Navbar */}
       <div className="w-full max-w-lg mt-20 mb-8 p-4 sm:p-6 md:p-8">
-        <div className="w-full max-w-lg space-y-8 rounded-xl bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-6 sm:p-8 border border-white/10 mx-auto">
+        <div className="w-full max-w-lg space-y-8 rounded-xl bg-background-light/80 dark:bg-background-dark/70 md:dark:bg-background-dark/80 backdrop-blur-sm p-6 sm:p-8 border border-white/10 mx-auto">
           
           {/* Step Progress */}
           <div className="text-center">
