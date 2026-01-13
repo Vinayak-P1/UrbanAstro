@@ -23,8 +23,11 @@ import ManagePricing from "./pages/admin/ManagePricing";
 
 // ✅ User Protected Route
 const ProtectedRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, initialized } = useContext(AuthContext);
   const location = useLocation();
+
+  // Wait until auth initialization completes to avoid redirect flash
+  if (!initialized) return null;
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
@@ -34,8 +37,10 @@ const ProtectedRoute = ({ children }) => {
 
 // ✅ Admin Protected Route
 const AdminRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, initialized } = useContext(AuthContext);
   const location = useLocation();
+
+  if (!initialized) return null;
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
@@ -54,7 +59,7 @@ function App() {
         {/* 🌐 Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/astrologers" element={<Astrologers />} />
-        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/askai" element={<Blogs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about-astrologer" element={<AboutAstrologer />} />
 
