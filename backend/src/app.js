@@ -20,26 +20,40 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// ✅ CORS Headers - Add before any routes
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Max-Age', '86400');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// ✅ Also use cors middleware
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
+
 // ✅ Handle JSON, urlencoded and webhook properly
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/payments/webhook") {
     express.raw({ type: "application/json" })(req, res, next);
   } else {
     express.json({ limit: "10mb" })(req, res, () => {
-      // also accept urlencoded bodies for form submissions
       express.urlencoded({ extended: true, limit: "10mb" })(req, res, next);
     });
   }
 });
 
-const corsOptions = {
-  origin: true, // Allow all origins
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan("dev"));
 
