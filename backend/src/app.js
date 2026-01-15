@@ -62,6 +62,11 @@ app.get("/health", (req, res) =>
   res.json({ ok: true, service: "cosmic-compass", time: new Date() })
 );
 
+// ✅ CORS test endpoint
+app.get("/cors-test", (req, res) =>
+  res.json({ ok: true, message: "CORS is working!", time: new Date() })
+);
+
 // ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);

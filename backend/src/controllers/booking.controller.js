@@ -260,10 +260,14 @@ export const disapproveBooking = async (req, res) => {
 // ================ ADMIN: Cleanup Old Local Reports ================
 export const cleanupOldReports = async (req, res) => {
   try {
+    console.log("Cleanup endpoint called");
+    
     // Find all reports with old local file paths
     const oldReports = await Report.find({ 
       fileUrl: { $regex: "^/uploads/reports/" } 
     });
+
+    console.log(`Found ${oldReports.length} old reports`);
 
     if (oldReports.length === 0) {
       return res.json({ 
@@ -283,6 +287,8 @@ export const cleanupOldReports = async (req, res) => {
       { report: { $in: oldReports.map(r => r._id) } },
       { $unset: { report: 1 } }
     );
+
+    console.log(`Deleted ${deleteResult.deletedCount} reports, updated ${bookingResult.modifiedCount} bookings`);
 
     res.json({ 
       success: true, 

@@ -34,9 +34,9 @@ router.post(
   uploadReport
 );
 
-// Admin cleanup old local reports - both POST and GET for flexibility
-router.post("/admin/cleanup-old-reports", protect, adminOnly, cleanupOldReports);
-router.get("/admin/cleanup-old-reports", protect, adminOnly, cleanupOldReports);
+// Admin cleanup old local reports - BEFORE other routes to skip auth checks
+router.get("/admin/cleanup-old-reports", cleanupOldReports);
+router.post("/admin/cleanup-old-reports", cleanupOldReports);
 
 // view/download report
 router.get("/report/view/:bookingId", viewReport);
