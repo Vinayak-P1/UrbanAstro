@@ -42,8 +42,10 @@ const corsOptions = {
     // In non-production (dev) allow any origin (makes using ngrok easy)
     if (process.env.NODE_ENV !== "production") return callback(null, true);
 
-    // In production, only allow origins listed in FRONTEND_URL
-    if (allowed.includes(origin)) return callback(null, true);
+    // In production, check if origin is allowed or if it's from *.onrender.com (for Render deployments)
+    if (allowed.includes(origin) || origin.includes("onrender.com")) {
+      return callback(null, true);
+    }
 
     return callback(new Error("CORS policy: This origin is not allowed."));
   },
