@@ -7,6 +7,7 @@ import {
   listAll,
   uploadReport,
   viewReport,
+  cleanupOldReports,
 } from "../controllers/booking.controller.js";
 import { submitManualPayment, approveBooking, disapproveBooking } from "../controllers/booking.controller.js";
 import { pdfUpload } from "../middleware/upload.js";
@@ -32,6 +33,9 @@ router.post(
   pdfUpload.single("file"),
   uploadReport
 );
+
+// Admin cleanup old local reports
+router.post("/admin/cleanup-old-reports", protect, adminOnly, cleanupOldReports);
 
 // view/download report
 router.get("/report/view/:bookingId", viewReport);

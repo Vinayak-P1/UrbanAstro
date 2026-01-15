@@ -256,3 +256,42 @@ export const disapproveBooking = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+
+// ================ ADMIN: Cleanup Old Local Reports ================
+export const cleanupOldReports = async (req, res) => {
+  try {
+    // Find all reports with old local file paths
+    const oldReports = await Report.find({ 
+      fileUrl: { $regex: "^/uploads/reports/" } 
+    });
+
+    if (oldReports.length === 0) {
+      return res.json({ 
+        success: true, 
+        message: "No old reports found",
+        deletedCount: 0 
+      });
+    }
+
+    // Delete old report records
+    const deleteResult = await Report.deleteMany({ 
+      fileUrl: { $regex: "^/uploads/reports/" } 
+    });
+    
+    // Remove report references from bookings
+    const bookingResult = await Booking.updateMany(
+      { report: { $in: oldReports.map(r => r._id) } },
+      { $unset: { report: 1 } }
+    );
+
+    res.json({ 
+      success: true, 
+      message: "Old reports cleaned up successfully",
+      deletedReports: deleteResult.deletedCount,
+      updatedBookings: bookingResult.modifiedCount
+    });
+  } catch (e) {
+    console.error("CLEANUP ERROR =>", e);
+    res.status(500).json({ error: e.message });
+  }
+};
