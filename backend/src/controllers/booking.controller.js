@@ -118,26 +118,47 @@ export const listAll = async (req, res) => {
 // ---------------- Upload Report (ADMIN) ----------------
 export const uploadReport = async (req, res) => {
   try {
+    console.log("=== UPLOAD REPORT START ===");
     const { bookingId } = req.params;
+    console.log("BookingId:", bookingId);
+    console.log("File received:", req.file ? "Yes" : "No");
+    
     const booking = await Booking.findById(bookingId);
-    if (!booking) return res.status(404).json({ error: "Booking not found" });
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+    if (!booking) {
+      console.log("Booking not found");
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    
+    if (!req.file) {
+      console.log("No file uploaded");
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
-    console.log("File object:", req.file);
+    console.log("File details:", {
+      path: req.file.path,
+      filename: req.file.filename,
+      size: req.file.size,
+      mimetype: req.file.mimetype
+    });
 
     // Check if file was uploaded via Cloudinary or local
     let fileUrl = null;
     
-    if (req.file.path) {
-      // Cloudinary storage - file has a path (full URL)
+    if (req.file.path && req.file.path.startsWith("http")) {
+      // Cloudinary storage - file has a full URL path
       fileUrl = req.file.path;
-      console.log("Using Cloudinary URL:", fileUrl);
+      console.log("✅ Using Cloudinary URL:", fileUrl);
     } else if (req.file.filename) {
-      // Fallback - local file storage
+      // Local file storage fallback
       fileUrl = `/uploads/reports/${req.file.filename}`;
-      console.log("Using local file:", fileUrl);
+      console.log("✅ Using local file path:", fileUrl);
+    } else if (req.file.path) {
+      // Fallback - just use the path as is
+      fileUrl = req.file.path;
+      console.log("✅ Using file path:", fileUrl);
     } else {
-      return res.status(400).json({ error: "File upload processing error" });
+      console.log("❌ No valid file path or URL found");
+      return res.status(400).json({ error: "File upload processing error - no valid file path" });
     }
 
     // store in DB
@@ -151,10 +172,13 @@ export const uploadReport = async (req, res) => {
     booking.status = "completed";
     await booking.save();
 
+    console.log("✅ Report created successfully:", report._id);
+    console.log("=== UPLOAD REPORT END ===");
+    
     res.json({ success: true, report });
   } catch (err) {
-    console.error("UPLOAD REPORT ERROR =>", err);
-    res.status(500).json({ error: err.message });
+    console.error("❌ UPLOAD REPORT ERROR =>", err);
+    res.status(500).json({ error: `Upload failed: ${err.message}` });
   }
 };
 

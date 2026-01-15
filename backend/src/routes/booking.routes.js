@@ -26,11 +26,21 @@ router.put("/:id/disapprove", protect, adminOnly, disapproveBooking);
 
 // admin list and upload
 router.get("/admin/all", protect, adminOnly, listAll);
+
+// PDF upload with error handling for multer
 router.post(
   "/:bookingId/report/upload",
   protect,
   adminOnly,
-  pdfUpload.single("file"),
+  (req, res, next) => {
+    pdfUpload.single("file")(req, res, (err) => {
+      if (err) {
+        console.error("MULTER ERROR:", err);
+        return res.status(400).json({ error: `File upload error: ${err.message}` });
+      }
+      next();
+    });
+  },
   uploadReport
 );
 
