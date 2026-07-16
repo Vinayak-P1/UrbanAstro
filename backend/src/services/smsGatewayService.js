@@ -1,9 +1,12 @@
 import axios from "axios";
 
-const SMS_URL = process.env.SMS_GATEWAY_URL || "https://api.sms-gate.app/3rdparty/v1";
+const BASE_URL = process.env.SMS_GATEWAY_BASE_URL || "https://api.sms-gate.app";
 const SMS_USER = process.env.SMS_GATEWAY_USERNAME;
 const SMS_PASS = process.env.SMS_GATEWAY_PASSWORD;
 const SMS_DEVICE = process.env.SMS_GATEWAY_DEVICE_ID;
+
+// Construct endpoint: POST /3rdparty/v1/messages
+const SMS_ENDPOINT = `${BASE_URL.replace(/\/+$/, "")}/3rdparty/v1/messages`;
 
 /**
  * Send an SMS message via SMS Gateway for Android Cloud API.
@@ -18,18 +21,22 @@ export async function sendSms(phone, message) {
     return { success: false, error: "SMS Gateway credentials not configured" };
   }
 
+  // Follow the official OpenAPI schema for Capcom6 SMS Gateway Message format
   const payload = {
-    message,
+    textMessage: {
+      text: message,
+    },
     phoneNumbers: [phone],
   };
 
-  // Optionally attach device ID when provided
+  // Attach optional device selection and delivery tracking if configured
   if (SMS_DEVICE) {
+    payload.deviceId = SMS_DEVICE;
     payload.withDeliveryReport = true;
   }
 
   try {
-    const response = await axios.post(`${SMS_URL}/messages`, payload, {
+    const response = await axios.post(SMS_ENDPOINT, payload, {
       auth: {
         username: SMS_USER,
         password: SMS_PASS,
