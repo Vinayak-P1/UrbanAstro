@@ -24,7 +24,7 @@ const ReadyToExplore = () => {
           onClick={handleConsultationClick}
           className="btn-shine inline-block bg-blue-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-[0_0_15px_rgba(0,123,255,0.5)] hover:shadow-[0_0_25px_rgba(0,123,255,0.8)] transition-all duration-300"
         >
-          Get Your Kundli Now — ₹99
+          Reveal Your Celestial Path
         </button>
       </div>
     </section>
