@@ -7,10 +7,7 @@ export const createAstrologer = async (req, res) => {
     let imageUrl = "";
 
     if (req.file) {
-      const upload = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: "astrologers",
-      });
-      imageUrl = upload.secure_url;
+      imageUrl = req.file.path || req.file.secure_url || "";
     }
 
     const astro = await Astrologer.create({
@@ -60,10 +57,7 @@ export const updateAstrologer = async (req, res) => {
 
     let imageUrl = astro.imageUrl;
     if (req.file) {
-      const upload = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: "astrologers",
-      });
-      imageUrl = upload.secure_url;
+      imageUrl = req.file.path || req.file.secure_url || "";
     }
 
     astro.name = req.body.name || astro.name;

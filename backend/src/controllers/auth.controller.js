@@ -151,8 +151,15 @@ export const verifyOtp = async (req, res) => {
     // ── Verify hash ───────────────────────────────────────────────────────────
     const isMatch = await bcrypt.compare(otp, record.otpHash);
     if (!isMatch) {
-      console.warn(`[AUTH] Verification failed: Entered OTP (${otp}) does not match stored hash for ${phone}`);
-      return res.status(400).json({ error: "Invalid OTP. Please check and try again." });
+      record.attempts = (record.attempts || 0) + 1;
+      if (record.attempts >= 3) {
+        await Otp.deleteOne({ _id: record._id });
+        console.warn(`[AUTH] Verification failed: Too many failed attempts for ${phone}. OTP deleted.`);
+        return res.status(400).json({ error: "Too many incorrect attempts. This OTP has been deactivated. Please request a new one." });
+      }
+      await record.save();
+      console.warn(`[AUTH] Verification failed: Entered OTP does not match stored hash for ${phone}. Attempt ${record.attempts}/3.`);
+      return res.status(400).json({ error: `Invalid OTP. Please check and try again (Attempt ${record.attempts}/3).` });
     }
 
     // ── OTP verified — delete it ──────────────────────────────────────────────

@@ -58,12 +58,12 @@ router.post(
   uploadReport
 );
 
-// Admin cleanup old local reports - BEFORE other routes to skip auth checks
-router.get("/admin/cleanup-old-reports", cleanupOldReports);
-router.post("/admin/cleanup-old-reports", cleanupOldReports);
+// Admin cleanup old local reports
+router.get("/admin/cleanup-old-reports", protect, adminOnly, cleanupOldReports);
+router.post("/admin/cleanup-old-reports", protect, adminOnly, cleanupOldReports);
 
 // view/download report
-router.get("/report/view/:bookingId", viewReport);
+router.get("/report/view/:bookingId", protect, viewReport);
 
 // delete report (ADMIN) - allows admin to delete and re-upload
 router.delete("/:bookingId/report/delete", protect, adminOnly, deleteReport);

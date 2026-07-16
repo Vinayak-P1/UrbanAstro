@@ -163,6 +163,11 @@ export const viewReport = async (req, res) => {
       return res.status(404).json({ error: "Report not found" });
     }
 
+    // Only booking owner or admin can view the report
+    if (booking.user.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+      return res.status(403).json({ error: "Access denied. You do not own this booking." });
+    }
+
     const fileUrl = booking.report.fileUrl;
     
     if (!fileUrl) {
@@ -251,6 +256,15 @@ export const submitManualPayment = async (req, res) => {
 
     if (!utr || !utr.trim()) return res.status(400).json({ error: "Transaction id (UTR) is required" });
 
+    // Validate that UTR has not already been used for another active/completed booking
+    const duplicateUtr = await Booking.findOne({
+      utr: utr.trim(),
+      status: { $in: ["awaiting_verification", "inprogress", "completed", "paid"] }
+    });
+    if (duplicateUtr) {
+      return res.status(400).json({ error: "This Transaction ID (UTR) has already been submitted for verification." });
+    }
+
     let finalLifeAreas = selectedLifeAreas;
     if (typeof selectedLifeAreas === "string" && selectedLifeAreas.trim()) {
       try {
@@ -316,6 +330,11 @@ export const approveBooking = async (req, res) => {
     const { id } = req.params;
     const booking = await Booking.findById(id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    // Validate that only bookings awaiting verification can be approved
+    if (booking.status !== "awaiting_verification") {
+      return res.status(400).json({ error: "Only bookings awaiting verification can be approved." });
+    }
 
     // On approve, mark as inprogress and decrement coupon uses if present
     booking.status = "inprogress";

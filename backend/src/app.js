@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import rateLimit from "express-rate-limit";
 import "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import bookingRoutes from "./routes/booking.routes.js";
@@ -20,26 +21,92 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// ✅ CORS - Simple and works
-app.use(cors());
+// ✅ CORS lockdown: allow localhost and production domain
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://cosmiccompass-7sox.onrender.com",
+  "https://compass-7sox.onrender.com",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile redirects, curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("CORS policy violation: Access from specified Origin is denied."), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
+// ✅ Custom NoSQL Injection Sanitizer Middleware
+// Recursively strips any keys starting with "$" to prevent Mongo Query Injection
+const nosqlSanitizer = (req, res, next) => {
+  const sanitize = (obj) => {
+    if (obj && typeof obj === "object") {
+      for (const key in obj) {
+        if (key.startsWith("$")) {
+          delete obj[key];
+        } else {
+          sanitize(obj[key]);
+        }
+      }
+    }
+  };
+  sanitize(req.body);
+  sanitize(req.query);
+  sanitize(req.params);
+  next();
+};
 
 // ✅ Handle JSON, urlencoded and webhook properly
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/payments/webhook") {
     express.raw({ type: "application/json" })(req, res, next);
   } else {
-    express.json({ limit: "10mb" })(req, res, (err) => {
+    // Set 500kb JSON body size limit to prevent huge payload DoS attacks
+    express.json({ limit: "500kb" })(req, res, (err) => {
       if (err) {
         console.error("JSON parse error:", err);
         return res.status(400).json({ error: "Invalid JSON format" });
       }
-      express.urlencoded({ extended: true, limit: "10mb" })(req, res, next);
+      // Set 500kb urlencoded body size limit
+      express.urlencoded({ extended: true, limit: "500kb" })(req, res, next);
     });
   }
 });
 
+// ✅ Apply NoSQL Sanitizer globally
+app.use(nosqlSanitizer);
+
+// ✅ Helmet configuration (adds CSP, HSTS, X-Frame-Options, X-Content-Type-Options)
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(morgan("dev"));
+
+// ✅ Rate Limiter for API Routes to prevent brute force & spam
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200, // Limit each IP to 200 requests per window
+  message: { error: "Too many requests from this IP. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/", generalLimiter);
+
+// ✅ Stricter Rate Limiter for Authentication endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 OTP requests per window
+  message: { error: "Too many login/verification requests. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/auth/send-otp", authLimiter);
+app.use("/api/auth/verify-otp", authLimiter);
 
 // ✅ Health check
 app.get("/health", (req, res) =>
@@ -60,10 +127,15 @@ app.use("/api/astrologers", astrologerRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/pricing", pricingRoutes);
 
-// ✅ Global Error Handler (prevents HTML error responses)
+// ✅ Global Error Handler (prevents html error leaks, keeps messages generic in production)
 app.use((err, req, res, next) => {
   console.error("🔥 Global Error:", err);
-  res.status(500).json({ error: err.message || "Internal Server Error" });
+  const status = err.status || 500;
+  const isProd = process.env.NODE_ENV === "production";
+  
+  res.status(status).json({
+    error: isProd ? "An internal server error occurred." : (err.message || "Internal Server Error"),
+  });
 });
 
 export default app;

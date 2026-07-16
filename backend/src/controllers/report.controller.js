@@ -25,7 +25,12 @@ res.status(500).json({ error: e.message });
 
 
 export const getMine = async (req, res) => {
-const reports = await Report.find({}).populate({ path: 'booking', match: { user: req.user._id } });
-const owned = reports.filter(r => r.booking); // only my reports
-res.json({ items: owned });
+  try {
+    const userBookings = await Booking.find({ user: req.user._id }).select("_id");
+    const bookingIds = userBookings.map((b) => b._id);
+    const reports = await Report.find({ booking: { $in: bookingIds } }).populate("booking");
+    res.json({ items: reports });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
