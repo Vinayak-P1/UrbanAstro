@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const API = import.meta.env.VITE_API_URL || "";
 
 const Astrologers = () => {
+  const navigate = useNavigate();
   const [list, setList] = useState([]);
 useEffect(() => {
   const title = "Verified Astrologers — Consult Online | UrbanAstro";
@@ -46,7 +49,11 @@ useEffect(() => {
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center">Our Astrologers</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {list.map(a => (
-          <div key={a._id} className="p-4 bg-white/10 rounded">
+          <div 
+            key={a._id} 
+            onClick={() => navigate(`/about-astrologer?id=${a._id}`, { state: { astrologer: a } })}
+            className="p-4 bg-white/10 rounded cursor-pointer hover:bg-white/15 hover:scale-[1.02] transition-all duration-300"
+          >
             <img src={a.imageUrl} className="w-full h-40 object-cover rounded mb-2" />
             <div className="font-bold">{a.name}</div>
             <div className="text-sm text-gray-300">{a.expertise} · {a.experience} yrs</div>
