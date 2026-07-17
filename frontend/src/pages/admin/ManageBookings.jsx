@@ -113,7 +113,9 @@ const ManageBookings = () => {
 
         {bookings.map((b) => (
           <div key={b._id} className="p-5 bg-white/10 rounded-lg mb-4">
-            <h2 className="text-xl font-bold">{b.name} — {b.email}</h2>
+            <h2 className="text-xl font-bold">
+              {b.name} — {b.phone || b.user?.phone || "No Phone"} ({b.email || b.user?.email || "No Email"})
+            </h2>
             <p className="text-sm text-gray-300">
               Plan: <span className="font-bold text-blue-400">{b.plan === 'premium' ? '👑 Premium' : '⚡ Starter'}</span>
               {b.refSource && <span className="ml-3 text-xs bg-white/10 px-2 py-0.5 rounded">QR: {b.refSource}</span>}

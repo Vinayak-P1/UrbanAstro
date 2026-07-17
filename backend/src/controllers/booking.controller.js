@@ -56,6 +56,7 @@ export const checkout = async (req, res) => {
       booking = await Booking.create({
         user: req.user._id,
         name,
+        phone: req.user.phone || "",
         email,
         birthDate,
         birthTime,
@@ -70,6 +71,7 @@ export const checkout = async (req, res) => {
     } else {
       booking.set({
         name,
+        phone: req.user.phone || "",
         email,
         birthDate,
         birthTime,
@@ -111,7 +113,7 @@ export const myBookings = async (req, res) => {
 export const listAll = async (req, res) => {
   const items = await Booking.find()
     .sort({ createdAt: -1 })
-    .populate("user", "name email")
+    .populate("user", "name email phone")
     .populate("report");
   res.json({ items });
 };
@@ -300,6 +302,7 @@ export const submitManualPayment = async (req, res) => {
     const booking = await Booking.create({
       user: req.user._id,
       name,
+      phone: req.user.phone || "",
       email,
       birthDate,
       birthTime,
