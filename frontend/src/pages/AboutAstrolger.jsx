@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const AboutAstrologer = () => {
+  useEffect(() => {
+    document.title = "About Stella Nova — Chief Astrologer | UrbanAstro";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Meet Stella Nova, Chief Astrologer at UrbanAstro. Blending Vedic and Western astrology for over a decade to guide you on career, love, and growth.");
+    }
+  }, []);
   return (
     <div className="bg-background-dark font-display text-gray-200 min-h-screen">
       {/* Astrologer Section */}

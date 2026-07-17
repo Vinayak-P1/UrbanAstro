@@ -4,6 +4,12 @@ const API = import.meta.env.VITE_API_URL || "";
 const Astrologers = () => {
   const [list, setList] = useState([]);
 useEffect(() => {
+  document.title = "Verified Astrologers — Consult Online | UrbanAstro";
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute("content", "Connect with verified Vedic astrologers at UrbanAstro. Get accurate astrological predictions, career guidance, love forecasts, and Kundli advice starting at ₹99.");
+  }
+
   (async () => {
     try {
       const res = await fetch(`${API}/api/astrologers`);

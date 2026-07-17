@@ -23,6 +23,15 @@ const Login = () => {
   const otpRefs = useRef([]);
   const phoneRef = useRef(null);
 
+  // Dynamic SEO meta updates
+  useEffect(() => {
+    document.title = "Secure Login / Signup | UrbanAstro";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Log in or sign up securely on UrbanAstro using your mobile number. Access your personalized astrology consultations, bookings, and reports.");
+    }
+  }, []);
+
   // Focus phone input on mount
   useEffect(() => {
     if (step === 1 && phoneRef.current) phoneRef.current.focus();

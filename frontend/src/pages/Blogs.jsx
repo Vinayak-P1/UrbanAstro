@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Blogs = () => {
+  useEffect(() => {
+    document.title = "Ask AI — AI Astrology Assistant | UrbanAstro";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", "Get instant, personalized answers to your burning astrology questions with our advanced Ask AI astrology assistant at UrbanAstro.");
+    }
+  }, []);
   const dummyQuestions = [
     {
       id: 1,
