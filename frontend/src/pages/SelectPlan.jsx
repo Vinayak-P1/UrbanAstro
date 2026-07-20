@@ -162,41 +162,7 @@ const SelectPlan = () => {
             </p>
           </header>
 
-          {/* Coupon Banner — only shows if there's a featured coupon */}
-          {featuredCoupon && (
-            <div className="mb-6 bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-amber-500/10 border border-amber-500/30 rounded-xl p-4">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-amber-400 text-xl">
-                    local_offer
-                  </span>
-                  <div>
-                    <p className="text-amber-300 font-bold text-sm">
-                      🎉 ₹{featuredCoupon.value} OFF — Only for first{" "}
-                      {featuredCoupon.remainingUses >= 999999
-                        ? "limited"
-                        : featuredCoupon.remainingUses}{" "}
-                      users!
-                    </p>
-                    <p className="text-amber-400/70 text-xs mt-0.5">
-                      Use this coupon at checkout
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleCopyCoupon}
-                  className="flex items-center gap-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 px-4 py-2 rounded-lg transition-all duration-300"
-                >
-                  <span className="font-mono font-bold text-amber-300 tracking-wider text-sm">
-                    {featuredCoupon.code}
-                  </span>
-                  <span className="material-symbols-outlined text-amber-400 text-base">
-                    {copied ? "check" : "content_copy"}
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
+
 
           {/* Plans Grid */}
           <div className={`grid grid-cols-1 ${plans.length > 1 ? "sm:grid-cols-2" : ""} gap-4`}>
