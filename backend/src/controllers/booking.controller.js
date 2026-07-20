@@ -256,17 +256,6 @@ export const submitManualPayment = async (req, res) => {
       refSource = "",
     } = req.body;
 
-    if (!utr || !utr.trim()) return res.status(400).json({ error: "Transaction id (UTR) is required" });
-
-    // Validate that UTR has not already been used for another active/completed booking
-    const duplicateUtr = await Booking.findOne({
-      utr: utr.trim(),
-      status: { $in: ["awaiting_verification", "inprogress", "completed", "paid"] }
-    });
-    if (duplicateUtr) {
-      return res.status(400).json({ error: "This Transaction ID (UTR) has already been submitted for verification." });
-    }
-
     let finalLifeAreas = selectedLifeAreas;
     if (typeof selectedLifeAreas === "string" && selectedLifeAreas.trim()) {
       try {
@@ -293,6 +282,24 @@ export const submitManualPayment = async (req, res) => {
     const finalRupees = priceAfterCoupon(basePlan, couponDoc);
     const amountPaise = toPaise(finalRupees);
 
+    let finalUtr = "";
+    if (amountPaise === 0) {
+      // Free booking: auto-generate a unique system UTR reference
+      finalUtr = `FREE-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    } else {
+      if (!utr || !utr.trim()) return res.status(400).json({ error: "Transaction id (UTR) is required" });
+      finalUtr = utr.trim();
+
+      // Validate that UTR has not already been used for another active/completed booking
+      const duplicateUtr = await Booking.findOne({
+        utr: finalUtr,
+        status: { $in: ["awaiting_verification", "inprogress", "completed", "paid"] }
+      });
+      if (duplicateUtr) {
+        return res.status(400).json({ error: "This Transaction ID (UTR) has already been submitted for verification." });
+      }
+    }
+
     let screenshot = "";
     if (req.file) {
       screenshot = req.file.path || req.file.url || req.file.secure_url || "";
@@ -314,10 +321,10 @@ export const submitManualPayment = async (req, res) => {
       amount: amountPaise,
       promoApplied: !!couponDoc,
       coupon: couponDoc ? couponDoc.code : "",
-      utr: utr.trim(),
+      utr: finalUtr,
       screenshot,
       refSource: refSource || "",
-      status: "awaiting_verification",
+      status: amountPaise === 0 ? "inprogress" : "awaiting_verification",
     });
 
     res.json({ success: true, bookingId: booking._id, status: booking.status });

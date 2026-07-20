@@ -142,9 +142,11 @@ const Payment = () => {
       return;
     }
 
-    if (!utrValue.trim() || utrValue.trim().length < 6) {
-      alert("Please enter a valid Transaction ID / UTR number (at least 6 digits)");
-      return;
+    if (finalAmount > 0) {
+      if (!utrValue.trim() || utrValue.trim().length < 6) {
+        alert("Please enter a valid Transaction ID / UTR number (at least 6 digits)");
+        return;
+      }
     }
 
     try {
@@ -159,7 +161,7 @@ const Payment = () => {
       formData.append("unknownTime", consultationData.unknownTime || false);
       formData.append("question", consultationData.question || "");
       formData.append("couponCode", appliedCoupon || "");
-      formData.append("utr", utrValue.trim());
+      formData.append("utr", finalAmount === 0 ? "FREE" : utrValue.trim());
       formData.append("plan", planSlug);
       if (consultationData.refSource) {
         formData.append("refSource", consultationData.refSource);
@@ -167,7 +169,7 @@ const Payment = () => {
       if (consultationData.selectedLifeAreas) {
         formData.append("selectedLifeAreas", JSON.stringify(consultationData.selectedLifeAreas));
       }
-      if (screenshotFile) {
+      if (finalAmount > 0 && screenshotFile) {
         formData.append("screenshot", screenshotFile);
       }
 
@@ -182,7 +184,11 @@ const Payment = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Verification submission failed");
       
-      alert("Payment details submitted successfully! The admin will verify your payment details and screenshot to approve your report shortly.");
+      if (finalAmount === 0) {
+        alert("Your order has been confirmed successfully! The astrologer will start working on your report shortly.");
+      } else {
+        alert("Payment details submitted successfully! The admin will verify your payment details and screenshot to approve your report shortly.");
+      }
       navigate("/my-bookings");
     } catch (err) {
       console.error("Submit verification error:", err);
@@ -281,171 +287,195 @@ const Payment = () => {
               </div>
             </div>
 
-            {/* Direct UPI Intent Link / Pay Button */}
-            <div className="space-y-3.5">
-              {/iPad|iPhone|iPod/.test(navigator.userAgent) ? (
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-gray-300 mb-1.5 text-center">📱 Select your UPI App (For iPhone users):</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    <a
-                      href={`phonepe://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                      className="flex flex-col items-center justify-center py-3 bg-purple-600/20 hover:bg-purple-600/35 border border-purple-500/30 rounded-xl transition-all text-center text-xs font-bold text-purple-300"
-                    >
-                      <span className="material-symbols-outlined text-lg mb-1">payments</span>
-                      PhonePe
-                    </a>
-                    <a
-                      href={`gpay://upi/pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                      className="flex flex-col items-center justify-center py-3 bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 rounded-xl transition-all text-center text-xs font-bold text-blue-300"
-                    >
-                      <span className="material-symbols-outlined text-lg mb-1">payments</span>
-                      GPay
-                    </a>
-                    <a
-                      href={`paytmmp://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                      className="flex flex-col items-center justify-center py-3 bg-sky-600/20 hover:bg-sky-600/35 border border-sky-500/30 rounded-xl transition-all text-center text-xs font-bold text-sky-300"
-                    >
-                      <span className="material-symbols-outlined text-lg mb-1">payments</span>
-                      Paytm
-                    </a>
-                  </div>
-                  <a
-                    href={upiIntentLink}
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all text-center mt-2"
-                  >
-                    <span className="material-symbols-outlined text-sm">smartphone</span>
-                    Other UPI / WhatsApp Pay
-                  </a>
-                </div>
-              ) : (
-                <>
-                  <a
-                    href={upiIntentLink}
-                    className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold rounded-xl text-lg shadow-[0_4px_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_4px_25px_rgba(16,185,129,0.4)] text-center animate-pulse"
-                  >
-                    <span className="material-symbols-outlined">smartphone</span>
-                    Pay ₹{finalAmount} via UPI App
-                  </a>
-                  <p className="text-[11px] sm:text-xs text-center text-gray-400">
-                    📱 Recommended for mobile users (Opens GPay, PhonePe, Paytm, BHIM directly).
-                  </p>
-                </>
-              )}
-            </div>
-
-            {/* QR Payment toggle button */}
-            <div className="space-y-3">
-              <button
-                type="button"
-                onClick={() => setShowQR(!showQR)}
-                className="w-full py-3 bg-white/5 border border-white/15 hover:bg-white/10 text-gray-200 hover:text-white font-bold rounded-xl text-sm transition-all text-center flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-sm">qr_code_2</span>
-                {showQR ? "Hide QR Code" : "Pay via QR (Preferred for desktop/laptop users)"}
-              </button>
-              
-              {showQR && (
-                <div className="flex flex-col items-center justify-center p-5 border border-white/10 bg-black/20 rounded-xl transition-all duration-300">
-                  <p className="text-xs font-semibold text-gray-400 mb-3">Scan with any UPI App on your phone</p>
-                  <img src={qrImg} alt="UPI Payment QR" className="w-44 h-44 object-contain rounded-lg border border-white/10 bg-white p-2 shadow-lg" />
-                  <p className="text-sm font-bold text-white mt-3">Pay ₹{finalAmount}</p>
-                </div>
-              )}
-            </div>
-
-            {/* I've Paid action button to show verification details */}
-            {!showVerification && (
-              <div className="border-t border-white/10 pt-4 text-center">
-                <button
-                  type="button"
-                  onClick={() => setShowVerification(true)}
-                  className="px-6 py-3 bg-blue-500/20 hover:bg-blue-500/35 border border-blue-500/40 text-blue-400 hover:text-blue-300 font-bold rounded-xl text-sm transition-all"
-                >
-                  👉 Click here after paying (I've Paid)
-                </button>
-              </div>
-            )}
-
-            {/* UTR & Screenshot Verification Form (Appears when user clicks "I've Paid") */}
-            {showVerification && (
-              <form onSubmit={handleVerifyPayment} className="border-t border-white/10 pt-5 space-y-4 transition-all duration-500">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <span className="material-symbols-outlined text-blue-400">verified_user</span>
-                  Verify Payment (After Paying)
-                </h3>
-                
-                {/* UTR Input */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">
-                    12-Digit Transaction ID / UTR Number *
-                  </label>
-                  <input
-                    type="text"
-                    value={utrValue}
-                    onChange={(e) => setUtrValue(e.target.value.replace(/[^0-9]/g, "").substring(0, 12))}
-                    placeholder="Enter 12-digit payment reference number"
-                    required
-                    className="w-full h-11 px-4 bg-black/30 border border-white/15 rounded-lg text-white font-mono placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
-                  />
-                </div>
-
-                {/* Payment Screenshot File Selector */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">
-                    Upload Payment Screenshot *
-                  </label>
-                  <div className="flex flex-col items-center justify-center bg-black/30 border border-dashed border-white/20 rounded-lg p-4 transition hover:border-white/40 relative">
-                    {screenshotPreview ? (
-                      <div className="w-full flex items-center gap-3">
-                        <img src={screenshotPreview} alt="Screenshot Preview" className="w-12 h-12 rounded object-cover border border-white/25" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-white truncate">{screenshotFile?.name}</p>
-                          <p className="text-[10px] text-gray-500">{(screenshotFile?.size / 1024).toFixed(1)} KB</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
-                          className="text-xs text-red-400 underline font-semibold"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ) : (
-                      <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                        <span className="material-symbols-outlined text-gray-400 text-2xl mb-1">image</span>
-                        <span className="text-xs font-semibold text-gray-300">Choose Screenshot Image</span>
-                        <span className="text-[10px] text-gray-500 mt-0.5">JPEG, PNG, or WebP</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          required
-                          className="hidden"
-                        />
-                      </label>
-                    )}
-                  </div>
-                </div>
-
-                {/* Submit Details Verification */}
+            {finalAmount === 0 ? (
+              <form onSubmit={handleVerifyPayment} className="space-y-4 pt-4 border-t border-white/10">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 flex items-center justify-center gap-2 text-sm"
+                  className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-extrabold rounded-xl text-lg shadow-[0_4px_20px_rgba(59,130,246,0.3)] transition-all duration-300 hover:scale-[1.01] flex items-center justify-center gap-2 text-center"
                 >
                   {loading ? (
                     <>
-                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                      Submitting Proof...
+                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                      Confirming Order...
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-sm">cloud_upload</span>
-                      Submit Verification Details
+                      <span className="material-symbols-outlined text-base">check_circle</span>
+                      Confirm & Submit Booking
                     </>
                   )}
                 </button>
               </form>
+            ) : (
+              <>
+                {/* Direct UPI Intent Link / Pay Button */}
+                <div className="space-y-3.5">
+                  {/iPad|iPhone|iPod/.test(navigator.userAgent) ? (
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-gray-300 mb-1.5 text-center">📱 Select your UPI App (For iPhone users):</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        <a
+                          href={`phonepe://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
+                          className="flex flex-col items-center justify-center py-3 bg-purple-600/20 hover:bg-purple-600/35 border border-purple-500/30 rounded-xl transition-all text-center text-xs font-bold text-purple-300"
+                        >
+                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          PhonePe
+                        </a>
+                        <a
+                          href={`gpay://upi/pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
+                          className="flex flex-col items-center justify-center py-3 bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 rounded-xl transition-all text-center text-xs font-bold text-blue-300"
+                        >
+                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          GPay
+                        </a>
+                        <a
+                          href={`paytmmp://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
+                          className="flex flex-col items-center justify-center py-3 bg-sky-600/20 hover:bg-sky-600/35 border border-sky-500/30 rounded-xl transition-all text-center text-xs font-bold text-sky-300"
+                        >
+                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          Paytm
+                        </a>
+                      </div>
+                      <a
+                        href={upiIntentLink}
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all text-center mt-2"
+                      >
+                        <span className="material-symbols-outlined text-sm">smartphone</span>
+                        Other UPI / WhatsApp Pay
+                      </a>
+                    </div>
+                  ) : (
+                    <>
+                      <a
+                        href={upiIntentLink}
+                        className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold rounded-xl text-lg shadow-[0_4px_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_4px_25px_rgba(16,185,129,0.4)] text-center animate-pulse"
+                      >
+                        <span className="material-symbols-outlined">smartphone</span>
+                        Pay ₹{finalAmount} via UPI App
+                      </a>
+                      <p className="text-[11px] sm:text-xs text-center text-gray-400">
+                        📱 Recommended for mobile users (Opens GPay, PhonePe, Paytm, BHIM directly).
+                      </p>
+                    </>
+                  )}
+                </div>
+
+                {/* QR Payment toggle button */}
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowQR(!showQR)}
+                    className="w-full py-3 bg-white/5 border border-white/15 hover:bg-white/10 text-gray-200 hover:text-white font-bold rounded-xl text-sm transition-all text-center flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-sm">qr_code_2</span>
+                    {showQR ? "Hide QR Code" : "Pay via QR (Preferred for desktop/laptop users)"}
+                  </button>
+                  
+                  {showQR && (
+                    <div className="flex flex-col items-center justify-center p-5 border border-white/10 bg-black/20 rounded-xl transition-all duration-300">
+                      <p className="text-xs font-semibold text-gray-400 mb-3">Scan with any UPI App on your phone</p>
+                      <img src={qrImg} alt="UPI Payment QR" className="w-44 h-44 object-contain rounded-lg border border-white/10 bg-white p-2 shadow-lg" />
+                      <p className="text-sm font-bold text-white mt-3">Pay ₹{finalAmount}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* I've Paid action button to show verification details */}
+                {!showVerification && (
+                  <div className="border-t border-white/10 pt-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setShowVerification(true)}
+                      className="px-6 py-3 bg-blue-500/20 hover:bg-blue-500/35 border border-blue-500/40 text-blue-400 hover:text-blue-300 font-bold rounded-xl text-sm transition-all"
+                    >
+                      👉 Click here after paying (I've Paid)
+                    </button>
+                  </div>
+                )}
+
+                {/* UTR & Screenshot Verification Form (Appears when user clicks "I've Paid") */}
+                {showVerification && (
+                  <form onSubmit={handleVerifyPayment} className="border-t border-white/10 pt-5 space-y-4 transition-all duration-500">
+                    <h3 className="text-base font-bold text-white flex items-center gap-2">
+                      <span className="material-symbols-outlined text-blue-400">verified_user</span>
+                      Verify Payment (After Paying)
+                    </h3>
+                    
+                    {/* UTR Input */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-400 mb-1">
+                        12-Digit Transaction ID / UTR Number *
+                      </label>
+                      <input
+                        type="text"
+                        value={utrValue}
+                        onChange={(e) => setUtrValue(e.target.value.replace(/[^0-9]/g, "").substring(0, 12))}
+                        placeholder="Enter 12-digit payment reference number"
+                        required
+                        className="w-full h-11 px-4 bg-black/30 border border-white/15 rounded-lg text-white font-mono placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
+                      />
+                    </div>
+
+                    {/* Payment Screenshot File Selector */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-400 mb-1">
+                        Upload Payment Screenshot *
+                      </label>
+                      <div className="flex flex-col items-center justify-center bg-black/30 border border-dashed border-white/20 rounded-lg p-4 transition hover:border-white/40 relative">
+                        {screenshotPreview ? (
+                          <div className="w-full flex items-center gap-3">
+                            <img src={screenshotPreview} alt="Screenshot Preview" className="w-12 h-12 rounded object-cover border border-white/25" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-white truncate">{screenshotFile?.name}</p>
+                              <p className="text-[10px] text-gray-500">{(screenshotFile?.size / 1024).toFixed(1)} KB</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
+                              className="text-xs text-red-400 underline font-semibold"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                            <span className="material-symbols-outlined text-gray-400 text-2xl mb-1">image</span>
+                            <span className="text-xs font-semibold text-gray-300">Choose Screenshot Image</span>
+                            <span className="text-[10px] text-gray-500 mt-0.5">JPEG, PNG, or WebP</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleFileChange}
+                              required
+                              className="hidden"
+                            />
+                          </label>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Submit Details Verification */}
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 flex items-center justify-center gap-2 text-sm"
+                    >
+                      {loading ? (
+                        <>
+                          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                          Submitting Proof...
+                        </>
+                      ) : (
+                        <>
+                          <span className="material-symbols-outlined text-sm">cloud_upload</span>
+                          Submit Verification Details
+                        </>
+                      )}
+                    </button>
+                  </form>
+                )}
+              </>
             )}
           </div>
         </div>
