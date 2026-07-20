@@ -39,16 +39,9 @@ const Navbar = () => {
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
         <Link
           to="/"
-          className="flex items-center gap-3 cursor-pointer no-underline"
+          className="flex items-center cursor-pointer no-underline"
         >
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2l2.09 6.26L20.18 10l-6.09 1.74L12 18l-2.09-6.26L3.82 10l6.09-1.74L12 2z"/>
-              </svg>
-            </div>
-            <span className="text-white text-xl font-bold tracking-tight" style={{fontFamily:'Inter,sans-serif'}}>Urban<span className="text-blue-400">Astro</span></span>
-          </div>
+          <img src="/UrbanAstro_logo.png" alt="UrbanAstro Logo" className="h-14 w-auto object-contain" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -172,11 +165,8 @@ const Navbar = () => {
           >
             <div className="p-6 flex flex-col gap-6">
               <div className="flex items-center justify-between">
-                <Link to="/" onClick={() => setShowMenu(false)} className="flex items-center gap-2 cursor-pointer no-underline">
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.09 6.26L20.18 10l-6.09 1.74L12 18l-2.09-6.26L3.82 10l6.09-1.74L12 2z"/></svg>
-                  </div>
-                  <span className="text-white text-lg font-bold tracking-tight" style={{fontFamily:'Inter,sans-serif'}}>Urban<span className="text-blue-400">Astro</span></span>
+                <Link to="/" onClick={() => setShowMenu(false)} className="flex items-center cursor-pointer no-underline">
+                  <img src="/UrbanAstro_logo.png" alt="UrbanAstro Logo" className="h-12 w-auto object-contain" />
                 </Link>
                 <button onClick={() => setShowMenu(false)} className="text-white">Close</button>
               </div>
