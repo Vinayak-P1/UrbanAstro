@@ -54,17 +54,17 @@ const HeroSection = () => {
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 pb-24 overflow-hidden">
       {/* ── Glow Blobs ───────────────────────────────────────────────── */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-[#22D3EE]/5 blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-[#7C3AED]/5 blur-[80px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#7C3AED]/10 blur-[130px]" />
+        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-[#F59E0B]/5 blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-[#7C3AED]/8 blur-[90px]" />
       </div>
 
       {/* ── Main Content ─────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-5xl mx-auto animate-fade-up">
         {/* Section Label Pill */}
         <div className="ua-section-label mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-          <span className="text-xs font-semibold text-white/60 tracking-widest uppercase">
+          <span className="dot" />
+          <span className="text">
             Backed by ancient science. Built for 2026.
           </span>
         </div>
@@ -79,7 +79,7 @@ const HeroSection = () => {
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base sm:text-lg md:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
+        <p className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
           Expert guidance on career, love, job, health, money, marriage,
           relationship and education from veteran astrologers.
         </p>
@@ -88,25 +88,25 @@ const HeroSection = () => {
         <div className="flex items-center justify-center">
           <button
             onClick={handleConsultationClick}
-            className="ua-btn-primary text-base px-8 py-4 shadow-lg shadow-[#7C3AED]/25 cursor-pointer"
+            className="ua-btn-primary text-base px-8 py-4 shadow-xl shadow-[#7C3AED]/30 hover:shadow-[#F59E0B]/20 cursor-pointer"
           >
-            <Sparkles className="w-4 h-4" />
-            Reveal Your Celestial Path
+            <Sparkles className="w-4.5 h-4.5 text-[#F59E0B]" />
+            <span>Reveal Your Celestial Path</span>
           </button>
         </div>
       </div>
 
       {/* ── Stats Row ────────────────────────────────────────────────── */}
-      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-white/[0.06] rounded-2xl overflow-hidden bg-white/[0.06] animate-fade-up animate-fade-up-d2">
+      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-[#F59E0B]/20 rounded-2xl overflow-hidden bg-[#F59E0B]/10 shadow-lg shadow-black/40 animate-fade-up animate-fade-up-d2">
         {statsList.map((s) => (
           <div key={s.label} className="bg-[#050816] px-6 py-5 text-center">
             <div
-              className="text-2xl font-bold text-white"
+              className="text-2xl sm:text-3xl font-bold text-white"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               {s.value}
             </div>
-            <div className="text-xs text-white/40 mt-1">{s.label}</div>
+            <div className="text-xs text-white/40 mt-1 font-medium">{s.label}</div>
           </div>
         ))}
       </div>
