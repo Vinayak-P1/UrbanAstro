@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Sparkles, ChevronRight, Shield, Users, Star, Zap } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const HeroSection = () => {
   const { user } = useContext(AuthContext);
@@ -56,21 +56,14 @@ const HeroSection = () => {
           relationship and education from veteran astrologers.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {/* Centered CTA Button */}
+        <div className="flex items-center justify-center">
           <button
             onClick={handleConsultationClick}
-            className="ua-btn-primary text-base px-8 py-4"
+            className="ua-btn-primary text-base px-8 py-4 shadow-lg shadow-[#7C3AED]/25"
           >
             <Sparkles className="w-4 h-4" />
             Reveal Your Celestial Path
-          </button>
-          <button
-            onClick={() => navigate("/astrologers")}
-            className="ua-btn-ghost text-base px-8 py-4"
-          >
-            Talk to an Astrologer
-            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
