@@ -136,11 +136,14 @@ const frontendDistPath = path.join(__dirname, "../../frontend/dist");
 if (fs.existsSync(frontendDistPath)) {
   console.log("⚡ Serving frontend build from:", frontendDistPath);
   app.use(express.static(frontendDistPath));
-  app.get("*", (req, res, next) => {
+  app.use((req, res, next) => {
     if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/sitemap.xml")) {
       return next();
     }
-    res.sendFile(path.join(frontendDistPath, "index.html"));
+    if (req.method === "GET") {
+      return res.sendFile(path.join(frontendDistPath, "index.html"));
+    }
+    next();
   });
 }
 
