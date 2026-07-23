@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ShieldCheck, Award, Star, Users } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 
@@ -44,71 +44,82 @@ const HeroSection = () => {
   };
 
   const statsList = [
-    { value: statsData.readingsDelivered, label: "Readings Delivered" },
-    { value: statsData.verifiedExperts, label: "Verified Experts" },
-    { value: statsData.userRating, label: "User Rating" },
-    { value: statsData.satisfaction, label: "Satisfaction" },
+    { value: statsData.readingsDelivered, label: "Readings Delivered", icon: Award },
+    { value: statsData.verifiedExperts, label: "Verified Experts", icon: ShieldCheck },
+    { value: statsData.userRating, label: "User Rating", icon: Star },
+    { value: statsData.satisfaction, label: "Satisfaction Rate", icon: Users },
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 pb-24 overflow-hidden">
-      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-28 pb-24 overflow-hidden">
+      {/* ── Ambient Radial Lighting Auras ───────────────────────────── */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#7C3AED]/10 blur-[130px]" />
-        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-[#F59E0B]/5 blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-[#7C3AED]/8 blur-[90px]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[#7C3AED]/12 blur-[140px]" />
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-[#D4AF37]/8 blur-[120px]" />
       </div>
 
-      {/* ── Main Content ─────────────────────────────────────────────── */}
+      {/* ── Main Hero Content ────────────────────────────────────────── */}
       <div className="relative z-10 max-w-5xl mx-auto animate-fade-up">
-        {/* Section Label Pill */}
-        <div className="ua-section-label mb-8">
-          <span className="dot" />
-          <span className="text">
-            Backed by ancient science. Built for 2026.
+        {/* Divine Celestial Pill Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md mb-8 shadow-lg shadow-[#D4AF37]/5">
+          <Sparkles className="w-4 h-4 text-[#D4AF37] animate-pulse" />
+          <span className="text-xs font-semibold tracking-wider text-[#E8C470] uppercase">
+            Backed by Ancient Vedic Science • Built for 2026
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Hero Headline */}
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight mb-6"
+          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1.04] tracking-tight mb-8"
           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
         >
           Unlock Your{" "}
-          <span className="text-[#7C3AED]">Future Clarity.</span>
+          <span className="bg-gradient-to-r from-[#A78BFA] via-[#7C3AED] to-[#E8C470] bg-clip-text text-transparent">
+            Future Clarity.
+          </span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
-          Expert guidance on career, love, job, health, money, marriage,
-          relationship and education from veteran astrologers.
+        <p className="text-base sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-12 font-light tracking-wide">
+          Direct 1-on-1 guidance on career, love, health, wealth & marriage from verified veteran astrologers.
         </p>
 
-        {/* Centered CTA Button */}
+        {/* Primary CTA Button */}
         <div className="flex items-center justify-center">
           <button
             onClick={handleConsultationClick}
-            className="ua-btn-primary text-base px-8 py-4 shadow-xl shadow-[#7C3AED]/30 hover:shadow-[#F59E0B]/20 cursor-pointer"
+            className="group relative inline-flex items-center gap-3 px-9 py-4.5 rounded-2xl bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-base transition-all duration-300 shadow-xl shadow-[#7C3AED]/35 hover:shadow-[#D4AF37]/25 hover:scale-[1.02] cursor-pointer border border-[#D4AF37]/30"
           >
-            <Sparkles className="w-4.5 h-4.5 text-[#F59E0B]" />
+            <Sparkles className="w-5 h-5 text-[#E8C470] transition-transform group-hover:rotate-12" />
             <span>Reveal Your Celestial Path</span>
           </button>
         </div>
       </div>
 
-      {/* ── Stats Row ────────────────────────────────────────────────── */}
-      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-[#F59E0B]/30 rounded-2xl overflow-hidden bg-[#F59E0B]/10 shadow-lg shadow-black/40 animate-fade-up animate-fade-up-d2">
-        {statsList.map((s) => (
-          <div key={s.label} className="bg-[#0b1022]/90 backdrop-blur-md px-6 py-5 text-center">
+      {/* ── Luxury Glass Stats Cards Grid ────────────────────────────── */}
+      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mt-20 w-full max-w-4xl animate-fade-up animate-fade-up-d2">
+        {statsList.map((s) => {
+          const Icon = s.icon;
+          return (
             <div
-              className="text-2xl sm:text-3xl font-bold text-white"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              key={s.label}
+              className="group relative p-6 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-[#D4AF37]/40 transition-all duration-300 text-center shadow-lg shadow-black/40 hover:-translate-y-1"
             >
-              {s.value}
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7C3AED]/15 border border-[#7C3AED]/30 mb-3 text-[#E8C470] group-hover:scale-110 transition-transform">
+                <Icon className="w-5 h-5" />
+              </div>
+              <div
+                className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight"
+                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              >
+                {s.value}
+              </div>
+              <div className="text-xs sm:text-sm font-medium text-white/60 mt-1">
+                {s.label}
+              </div>
             </div>
-            <div className="text-xs text-[#F59E0B]/80 mt-1 font-semibold">{s.label}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
