@@ -1,22 +1,37 @@
 @import "tailwindcss";
 
 /* ════════════════════════════════════════════════════════════════════════════
-   URBANASTRO — DESIGN SYSTEM TOKENS (PURE ROYAL PURPLE + WARM GOLD ACCENTS)
+   URBANASTRO — LUXURY COLOR SYSTEM DESIGN TOKENS
    ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --ua-bg:            #050816;
-  --ua-bg-card:       #0b1022;
+  /* Core Surface Tokens */
+  --ua-bg-primary:    #05050A;
+  --ua-bg-secondary:  #0D0D14;
+  --ua-glass-surface: rgba(255, 255, 255, 0.04);
+  --ua-glass-border:  rgba(255, 255, 255, 0.08);
+
+  /* Legacy Mapping */
+  --ua-bg:            var(--ua-bg-primary);
+  --ua-bg-card:       var(--ua-bg-secondary);
+
+  /* Brand Accents */
   --ua-primary:       #7C3AED;
   --ua-primary-hover: #6D28D9;
-  --ua-gold:          #F59E0B;
-  --ua-gold-border:   rgba(245, 158, 11, 0.22);
-  --ua-gold-glow:     rgba(245, 158, 11, 0.15);
-  --ua-accent:        #22D3EE;
+  
+  /* Scoped Luxury Gold (Highlights & Badges Only) */
+  --ua-gold-luxury:   #D4AF37;
+  --ua-gold-soft:     #E8C470;
+  --ua-gold:          #D4AF37;
+  --ua-gold-border:   rgba(212, 175, 55, 0.20);
+  --ua-gold-glow:     rgba(212, 175, 55, 0.12);
+  
+  /* Borders & Typography Contrast Tokens */
   --ua-border:        rgba(255, 255, 255, 0.08);
-  --ua-text:          #ffffff;
-  --ua-text-muted:    rgba(255, 255, 255, 0.50);
-  --ua-text-dim:      rgba(255, 255, 255, 0.40);
+  --ua-text-primary:  #FFFFFF;
+  --ua-text-secondary:rgba(255, 255, 255, 0.72);
+  --ua-text-muted:    rgba(255, 255, 255, 0.48);
+  --ua-text:          var(--ua-text-primary);
   --ua-radius:        20px;
 }
 
@@ -25,8 +40,8 @@
    ════════════════════════════════════════════════════════════════════════════ */
 
 html, body, #root {
-  background-color: var(--ua-bg);
-  color: var(--ua-text);
+  background-color: var(--ua-bg-primary);
+  color: var(--ua-text-primary);
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -48,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glow {
-  text-shadow: 0 0 12px rgba(124, 58, 237, 0.5), 0 0 24px rgba(245, 158, 11, 0.25);
+  text-shadow: 0 0 12px rgba(124, 58, 237, 0.5), 0 0 24px rgba(212, 175, 55, 0.25);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -56,29 +71,29 @@ h1, h2, h3, h4, h5, h6 {
    ════════════════════════════════════════════════════════════════════════════ */
 
 .ua-card {
-  background: var(--ua-bg-card);
-  border: 1px solid var(--ua-border);
+  background: var(--ua-bg-secondary);
+  border: 1px solid var(--ua-glass-border);
   border-radius: var(--ua-radius);
 }
 
 .ua-card-gold {
-  background: var(--ua-bg-card);
+  background: var(--ua-bg-secondary);
   border: 1px solid var(--ua-gold-border);
   border-radius: var(--ua-radius);
-  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.06);
+  box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.06);
 }
 
 .ua-card-hover {
   transition: all 0.25s ease;
 }
 .ua-card-hover:hover {
-  border-color: rgba(245, 158, 11, 0.3);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 6px 24px -4px rgba(245, 158, 11, 0.12);
+  border-color: rgba(212, 175, 55, 0.3);
+  background: var(--ua-glass-surface);
+  box-shadow: 0 6px 24px -4px rgba(212, 175, 55, 0.12);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   BUTTONS (PURE ROYAL PURPLE + GOLD GLOW ON HOVER)
+   BUTTONS (ROYAL ELECTRIC PURPLE)
    ════════════════════════════════════════════════════════════════════════════ */
 
 .ua-btn-primary {
@@ -98,8 +113,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .ua-btn-primary:hover {
   background: #6D28D9;
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 0 6px 20px 0 rgba(124, 58, 237, 0.45), 0 0 15px 0 rgba(245, 158, 11, 0.25);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 20px 0 rgba(124, 58, 237, 0.45), 0 0 15px 0 rgba(212, 175, 55, 0.20);
 }
 .ua-btn-primary:active {
   transform: scale(0.98);
@@ -112,17 +127,17 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.75rem 1.5rem;
   font-weight: 600;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--ua-text-secondary);
+  border: 1px solid var(--ua-glass-border);
   border-radius: 0.75rem;
   background: transparent;
   transition: all 0.25s ease;
   cursor: pointer;
 }
 .ua-btn-ghost:hover {
-  border-color: rgba(245, 158, 11, 0.5);
-  color: #F59E0B;
-  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #E8C470;
+  background: rgba(212, 175, 55, 0.05);
 }
 .ua-btn-ghost:active {
   transform: scale(0.98);
@@ -139,23 +154,23 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.375rem 0.875rem;
   border-radius: 9999px;
   background: rgba(124, 58, 237, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   margin-bottom: 1.5rem;
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.08);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.08);
 }
 
 .ua-section-label span.dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #F59E0B;
-  box-shadow: 0 0 8px #F59E0B;
+  background: #D4AF37;
+  box-shadow: 0 0 8px #D4AF37;
 }
 
 .ua-section-label span.text {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #F59E0B;
+  color: #E8C470;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -174,10 +189,10 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   border: 1px solid;
 }
-.ua-badge-default  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.08); }
+.ua-badge-default  { background: rgba(255,255,255,0.04); color: var(--ua-text-secondary); border-color: var(--ua-glass-border); }
 .ua-badge-success  { background: rgba(16,185,129,0.1);  color: #34d399; border-color: rgba(16,185,129,0.2); }
-.ua-badge-warning  { background: rgba(245,158,11,0.1);  color: #fbbf24; border-color: rgba(245,158,11,0.2); }
-.ua-badge-accent   { background: rgba(34,211,238,0.1);  color: #22D3EE; border-color: rgba(34,211,238,0.2); }
+.ua-badge-warning  { background: rgba(212,175,55,0.1);  color: #E8C470; border-color: rgba(212,175,55,0.2); }
+.ua-badge-accent   { background: rgba(124,58,237,0.12); color: #A78BFA; border-color: rgba(124,58,237,0.25); }
 
 /* ════════════════════════════════════════════════════════════════════════════
    ANIMATIONS
@@ -217,8 +232,8 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-text-fill-color: #ffffff !important;
-  -webkit-box-shadow: 0 0 0px 1000px var(--ua-bg) inset !important;
-  box-shadow: 0 0 0px 1000px var(--ua-bg) inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--ua-bg-primary) inset !important;
+  box-shadow: 0 0 0px 1000px var(--ua-bg-primary) inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -253,7 +268,7 @@ input:-webkit-autofill:active {
 [class*="bg-background-dark"] textarea {
   background-color: rgba(255,255,255,0.03) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(212, 175, 55, 0.15) !important;
   box-shadow: none !important;
 }
 
@@ -261,6 +276,6 @@ input:-webkit-autofill:active {
 [class*="bg-background-dark"] textarea:focus,
 [class*="bg-background-dark"] select:focus {
   outline: none !important;
-  border-color: rgba(245, 158, 11, 0.6) !important;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2) !important;
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.2) !important;
 }

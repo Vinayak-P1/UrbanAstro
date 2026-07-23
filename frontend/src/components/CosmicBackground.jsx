@@ -44,7 +44,7 @@ const CosmicBackground = () => {
       ))}
 
       <style>{`
-        /* Deep space background with subtle localized golden/amber cosmic auras */
+        /* Deep Obsidian background with 2 large cinematic ambient light sources */
         .stars-container {
           position: fixed;
           top: 0;
@@ -53,12 +53,10 @@ const CosmicBackground = () => {
           height: 100%;
           z-index: 0;
           pointer-events: none;
-          background-color: #050816;
+          background-color: #05050A;
           background-image: 
-            radial-gradient(750px 480px at 85% 15%, rgba(245, 158, 11, 0.14), rgba(5, 8, 22, 0) 65%), 
-            radial-gradient(650px 400px at 10% 85%, rgba(217, 119, 6, 0.09), rgba(5, 8, 22, 0) 60%), 
-            radial-gradient(550px 350px at 95% 65%, rgba(245, 158, 11, 0.07), rgba(5, 8, 22, 0) 55%),
-            radial-gradient(500px 320px at 15% 30%, rgba(251, 191, 36, 0.05), rgba(5, 8, 22, 0) 50%);
+            radial-gradient(1200px 750px at 85% 10%, rgba(212, 175, 55, 0.12), rgba(5, 5, 10, 0) 70%), 
+            radial-gradient(900px 600px at 10% 90%, rgba(124, 58, 237, 0.07), rgba(5, 5, 10, 0) 65%);
         }
 
         /* Star base styling */
