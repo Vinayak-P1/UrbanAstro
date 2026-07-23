@@ -12,28 +12,29 @@ async function getOrCreateSettings() {
 
 export const getPublicStats = async (req, res) => {
   try {
+    // Prevent browser caching for live stats
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
     const settings = await getOrCreateSettings();
 
     // 1. Readings Delivered = Base + Completed Bookings count
     const completedBookingsCount = await Booking.countDocuments({ status: "completed" });
     const totalReadings = (settings.readingsBase || 0) + completedBookingsCount;
 
-    // Format readings: e.g. 10K+ if >= 10000, 10.5K+ if >= 1000, else 500+
-    let readingsFormatted = `${totalReadings}+`;
-    if (totalReadings >= 10000) {
-      readingsFormatted = `${Math.floor(totalReadings / 1000)}K+`;
-    } else if (totalReadings >= 1000) {
-      readingsFormatted = `${(totalReadings / 1000).toFixed(1)}K+`;
+    // Format readings: if >= 10000, use formatted number with comma (e.g. 10,005+) or K+ format
+    let readingsFormatted = `${totalReadings.toLocaleString()}+`;
+    if (totalReadings >= 10000 && totalReadings % 1000 === 0) {
+      readingsFormatted = `${totalReadings / 1000}K+`;
     }
 
     // 2. Verified Experts = Base + Actual Astrologers count
     const astrologersCount = await Astrologer.countDocuments({ isActive: { $ne: false } });
     const totalExperts = (settings.verifiedExpertsBase || 0) + astrologersCount;
-    const expertsFormatted = `${totalExperts}+`;
+    const expertsFormatted = `${totalExperts.toLocaleString()}+`;
 
     // 3. User Rating (calculated automatically or manual override)
     let userRatingFormatted = "4.9";
-    if (settings.userRatingOverride != null) {
+    if (settings.userRatingOverride != null && !isNaN(settings.userRatingOverride)) {
       userRatingFormatted = Number(settings.userRatingOverride).toFixed(1);
     } else {
       const ratedBookings = await Booking.find({ rating: { $ne: null } }).select("rating");
@@ -45,7 +46,7 @@ export const getPublicStats = async (req, res) => {
 
     // 4. Satisfaction Percentage (calculated automatically or manual override)
     let satisfactionFormatted = "98%";
-    if (settings.satisfactionOverride != null) {
+    if (settings.satisfactionOverride != null && !isNaN(settings.satisfactionOverride)) {
       satisfactionFormatted = `${settings.satisfactionOverride}%`;
     } else {
       const ratedBookings = await Booking.find({ rating: { $ne: null } }).select("rating");
@@ -77,6 +78,7 @@ export const getPublicStats = async (req, res) => {
 
 export const getAdminStatsSettings = async (req, res) => {
   try {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     const settings = await getOrCreateSettings();
     const completedBookingsCount = await Booking.countDocuments({ status: "completed" });
     const astrologersCount = await Astrologer.countDocuments({ isActive: { $ne: false } });
@@ -116,14 +118,14 @@ export const updateAdminStatsSettings = async (req, res) => {
 
     if (userRatingOverride !== undefined) {
       settings.userRatingOverride =
-        userRatingOverride === "" || userRatingOverride === null
+        userRatingOverride === "" || userRatingOverride === null || isNaN(userRatingOverride)
           ? null
           : Number(userRatingOverride);
     }
 
     if (satisfactionOverride !== undefined) {
       settings.satisfactionOverride =
-        satisfactionOverride === "" || satisfactionOverride === null
+        satisfactionOverride === "" || satisfactionOverride === null || isNaN(satisfactionOverride)
           ? null
           : Number(satisfactionOverride);
     }
