@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Plus, Edit, Trash2, X, Eye, EyeOff, Sparkles, Check, DollarSign } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 
@@ -176,169 +177,127 @@ const ManagePricing = () => {
 
   // ===== FORM VIEW =====
   if (editing !== null) {
-    const selectedColor = COLOR_PRESETS.find(
-      (c) => c.from === form.colorFrom && c.to === form.colorTo
-    );
-
     return (
-      <div className="min-h-screen bg-[#0B0B1A] text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 py-8">
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen font-display text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden">
+        {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl sm:text-3xl font-bold">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {editing === "new" ? "Create New Plan" : "Edit Plan"}
             </h1>
-            <button onClick={cancelEdit} className="text-gray-400 hover:text-white transition">
-              <span className="material-symbols-outlined">close</span>
+            <button onClick={cancelEdit} className="p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/[0.06] transition-all">
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="bg-white/10 border border-white/20 rounded-2xl p-6 space-y-5">
+          <div className="ua-card p-6 space-y-5">
             {/* Name */}
             <div>
-              <label className="block text-sm font-semibold mb-1 text-gray-300">Plan Name *</label>
+              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Plan Name *</label>
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="e.g. Starter, Premium"
-                className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
               />
-            </div>
-
-            {/* Icon */}
-            <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-300">Icon</label>
-              <div className="flex flex-wrap gap-2">
-                {ICONS.map((ic) => (
-                  <button
-                    key={ic}
-                    type="button"
-                    onClick={() => setForm({ ...form, icon: ic })}
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
-                      form.icon === ic
-                        ? "bg-blue-500 ring-2 ring-blue-400"
-                        : "bg-white/10 hover:bg-white/20"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-white text-lg">{ic}</span>
-                  </button>
-                ))}
-              </div>
             </div>
 
             {/* Prices */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1 text-gray-300">Original Price (₹) *</label>
+                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Original Price (₹) *</label>
                 <input
                   type="number"
                   min="0"
                   value={form.originalPrice}
                   onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
                   placeholder="299"
-                  className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
                 />
-                <p className="text-xs text-gray-500 mt-1">Shown as strikethrough</p>
+                <p className="text-[10px] text-white/40 mt-1">Shown as strikethrough</p>
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1 text-gray-300">Selling Price (₹) *</label>
+                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Selling Price (₹) *</label>
                 <input
                   type="number"
                   min="0"
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
                   placeholder="99"
-                  className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
                 />
-                <p className="text-xs text-gray-500 mt-1">Price shown on payment page</p>
+                <p className="text-[10px] text-white/40 mt-1">Price shown on payment page</p>
               </div>
             </div>
 
             {/* Allowed Questions */}
             <div>
-              <label className="block text-sm font-semibold mb-1 text-gray-300">Allowed Questions Count *</label>
+              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Allowed Questions Count *</label>
               <input
                 type="number"
                 min="1"
                 value={form.questionCount}
                 onChange={(e) => setForm({ ...form, questionCount: e.target.value })}
                 placeholder="2"
-                className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
               />
-              <p className="text-xs text-gray-500 mt-1">Controls how many question inputs the user gets on checkout</p>
+              <p className="text-[10px] text-white/40 mt-1">Controls how many question inputs the user gets on checkout</p>
             </div>
 
             {/* Badge */}
             <div>
-              <label className="block text-sm font-semibold mb-1 text-gray-300">Badge (optional)</label>
+              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Badge (optional)</label>
               <input
                 value={form.badge}
                 onChange={(e) => setForm({ ...form, badge: e.target.value })}
                 placeholder="e.g. BEST VALUE ⭐"
-                className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
               />
             </div>
 
             {/* Features */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-300">Features / Bullet Points</label>
+              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Features / Bullet Points</label>
               {form.features.map((f, idx) => (
                 <div key={idx} className="flex gap-2 mb-2">
                   <input
                     value={f}
                     onChange={(e) => updateFeature(idx, e.target.value)}
                     placeholder={`Feature ${idx + 1}`}
-                    className="flex-1 bg-black/30 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
                   />
                   <button
                     type="button"
                     onClick={() => removeFeature(idx)}
-                    className="w-10 h-10 rounded-lg bg-red-500/20 hover:bg-red-500/40 flex items-center justify-center transition"
+                    className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 flex items-center justify-center text-red-400 transition"
                   >
-                    <span className="material-symbols-outlined text-red-400 text-sm">delete</span>
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               ))}
               <button
                 type="button"
                 onClick={addFeature}
-                className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1 mt-1"
+                className="text-xs text-[#22D3EE] font-semibold hover:underline flex items-center gap-1 mt-2"
               >
-                <span className="material-symbols-outlined text-base">add</span>
+                <Plus className="w-3.5 h-3.5" />
                 Add Feature
               </button>
-            </div>
-
-            {/* Color */}
-            <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-300">Color Theme</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {COLOR_PRESETS.map((c) => (
-                  <button
-                    key={c.label}
-                    type="button"
-                    onClick={() => setForm({ ...form, colorFrom: c.from, colorTo: c.to })}
-                    className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all ${
-                      form.colorFrom === c.from && form.colorTo === c.to
-                        ? "border-blue-400 bg-white/10"
-                        : "border-white/10 hover:border-white/30"
-                    }`}
-                  >
-                    <div className={`w-6 h-6 rounded-full bg-gradient-to-br from-${c.from} to-${c.to}`}></div>
-                    <span className="text-xs text-gray-300">{c.label}</span>
-                  </button>
-                ))}
-              </div>
             </div>
 
             {/* Sort Order & Active */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1 text-gray-300">Sort Order</label>
+                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">Sort Order</label>
                 <input
                   type="number"
                   value={form.sortOrder}
                   onChange={(e) => setForm({ ...form, sortOrder: e.target.value })}
-                  className="w-full bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm"
                 />
               </div>
               <div className="flex items-end">
@@ -347,9 +306,9 @@ const ManagePricing = () => {
                     type="checkbox"
                     checked={form.active}
                     onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                    className="w-5 h-5 rounded accent-blue-500"
+                    className="w-4 h-4 rounded accent-[#7C3AED] cursor-pointer"
                   />
-                  <span className="text-sm font-semibold text-gray-300">Active (visible to users)</span>
+                  <span className="text-sm font-semibold text-white/70">Active (visible to users)</span>
                 </label>
               </div>
             </div>
@@ -357,10 +316,10 @@ const ManagePricing = () => {
             {/* Message */}
             {message && (
               <div
-                className={`p-3 rounded-lg text-sm font-medium ${
+                className={`p-3 rounded-xl text-sm font-medium ${
                   message.includes("✅")
-                    ? "bg-green-500/20 border border-green-500/50 text-green-300"
-                    : "bg-red-500/20 border border-red-500/50 text-red-300"
+                    ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-300"
+                    : "bg-red-500/10 border border-red-500/20 text-red-300"
                 }`}
               >
                 {message}
@@ -371,7 +330,7 @@ const ManagePricing = () => {
             <button
               onClick={handleSave}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 text-lg"
+              className="w-full h-12 ua-btn-primary justify-center text-base shadow-lg shadow-[#7C3AED]/25 disabled:opacity-50"
             >
               {loading ? "Saving..." : editing === "new" ? "Create Plan" : "Update Plan"}
             </button>
@@ -383,18 +342,28 @@ const ManagePricing = () => {
 
   // ===== LIST VIEW =====
   return (
-    <div className="min-h-screen bg-[#0B0B1A] text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen font-display text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-6 animate-fade-up">
           <div>
-            <h1 className="text-2xl sm:text-4xl font-bold">Manage Plans</h1>
-            <p className="text-gray-400 mt-1">Create and manage pricing plans shown to users</p>
+            <div className="ua-section-label mb-2">
+              <span className="dot" />
+              <span className="text">Pricing</span>
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Manage <span className="text-[#7C3AED]">Plans</span>
+            </h1>
           </div>
           <button
             onClick={startCreate}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-lg hover:shadow-blue-500/30 px-5 py-3 rounded-xl font-bold transition-all"
+            className="ua-btn-primary py-2.5 text-sm"
           >
-            <span className="material-symbols-outlined text-lg">add</span>
+            <Plus className="w-4 h-4" />
             New Plan
           </button>
         </div>
@@ -402,10 +371,10 @@ const ManagePricing = () => {
         {/* Message */}
         {message && (
           <div
-            className={`mb-4 p-3 rounded-lg text-sm font-medium ${
+            className={`mb-4 p-3 rounded-xl text-sm font-medium ${
               message.includes("✅")
-                ? "bg-green-500/20 border border-green-500/50 text-green-300"
-                : "bg-red-500/20 border border-red-500/50 text-red-300"
+                ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-300"
+                : "bg-red-500/10 border border-red-500/20 text-red-300"
             }`}
           >
             {message}
@@ -413,47 +382,45 @@ const ManagePricing = () => {
         )}
 
         {plans.length === 0 ? (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-            <span className="material-symbols-outlined text-5xl text-gray-600 mb-4 block">
-              sell
-            </span>
-            <p className="text-gray-400 text-lg">No plans yet. Create your first plan!</p>
+          <div className="ua-card p-12 text-center animate-fade-up">
+            <DollarSign className="w-12 h-12 text-white/20 mx-auto mb-4" />
+            <p className="text-white/50 text-base">No plans yet. Create your first plan!</p>
           </div>
         ) : (
           <div className="grid gap-4">
             {plans.map((plan) => (
               <div
                 key={plan._id}
-                className={`bg-white/5 border rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4 transition-all ${
-                  plan.active ? "border-white/15" : "border-red-500/30 opacity-60"
+                className={`ua-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 transition-all ${
+                  plan.active ? "" : "opacity-60 border-red-500/20"
                 }`}
               >
                 {/* Icon + Info */}
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${plan.colorFrom} to-${plan.colorTo} flex items-center justify-center shadow-lg shrink-0`}
-                  >
-                    <span className="material-symbols-outlined text-white text-2xl">{plan.icon}</span>
+                  <div className="w-12 h-12 rounded-xl bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-6 h-6 text-[#7C3AED]" />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                      <h3 className="text-lg font-bold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                        {plan.name}
+                      </h3>
                       {plan.badge && (
-                        <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-[#7C3AED]/20 text-[#22D3EE] text-xs font-semibold px-2.5 py-0.5 rounded-full border border-[#7C3AED]/30">
                           {plan.badge}
                         </span>
                       )}
                       {!plan.active && (
-                        <span className="bg-red-500/20 text-red-400 text-xs font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-red-500/10 text-red-400 text-xs font-semibold px-2 py-0.5 rounded-full border border-red-500/20">
                           HIDDEN
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-gray-500 line-through text-sm">₹{plan.originalPrice}</span>
-                      <span className="text-white font-bold text-lg">₹{plan.price}</span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-white/40 line-through text-sm">₹{plan.originalPrice}</span>
+                      <span className="text-white font-extrabold text-lg" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>₹{plan.price}</span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5 truncate">
+                    <p className="text-xs text-white/40 mt-1 truncate">
                       {plan.features.length} features · Questions: {plan.questionCount || 2} · Order: {plan.sortOrder}
                     </p>
                   </div>
@@ -463,25 +430,27 @@ const ManagePricing = () => {
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => handleToggleActive(plan)}
-                    className={`px-3 py-2 rounded-lg text-xs font-bold transition ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
                       plan.active
-                        ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                        : "bg-gray-500/20 text-gray-400 hover:bg-gray-500/30"
+                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        : "bg-white/[0.04] text-white/40 border border-white/[0.06]"
                     }`}
                   >
                     {plan.active ? "Active ✅" : "Hidden 🚫"}
                   </button>
                   <button
                     onClick={() => startEdit(plan)}
-                    className="p-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition"
+                    className="p-2 rounded-xl text-blue-400 hover:bg-blue-500/10 transition-colors"
+                    title="Edit"
                   >
-                    <span className="material-symbols-outlined text-blue-400 text-lg">edit</span>
+                    <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(plan._id)}
-                    className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
+                    className="p-2 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors"
+                    title="Delete"
                   >
-                    <span className="material-symbols-outlined text-red-400 text-lg">delete</span>
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>

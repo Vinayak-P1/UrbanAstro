@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Phone, KeyRound, User, ArrowLeft, Loader2 } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 
@@ -239,46 +240,108 @@ const Login = () => {
     if (countdown > 0) return;
     handleSendOtp();
   };
-  return (
-    <div className="font-display min-h-screen w-full max-w-full flex flex-col items-center justify-center py-20 px-4 bg-[#030014] text-white relative overflow-x-hidden">
-      {/* 🌌 Starfield Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(white,rgba(255,255,255,0.15)_1px,transparent_40px),radial-gradient(white,rgba(255,255,255,0.1)_1px,transparent_30px),radial-gradient(white,rgba(255,255,255,0.05)_2px,transparent_40px),radial-gradient(rgba(255,255,255,0.25),rgba(255,255,255,0.05)_2px,transparent_30px)] bg-[size:550px_550px,350px_350px,250px_250px,150px_150px] bg-[position:0_0,40px_60px,130px_270px,70px_100px] animate-stars" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b0b20]/40 via-[#0b0b20]/30 to-[#1b0033]/20 pointer-events-none" />
 
-      {/* Card */}
-      <div className="relative w-full max-w-md mx-auto bg-white/10 dark:bg-black/30 backdrop-blur-xl rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.6)] border border-white/10 overflow-hidden z-10">
+  // ─── Step icons for the progress indicator ─────────────────────────────────
+  const stepIcons = [
+    { icon: Phone, label: "Phone" },
+    { icon: KeyRound, label: "Verify" },
+    { icon: User, label: "Profile" },
+  ];
+
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center justify-center py-20 px-4 relative overflow-hidden">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] rounded-full bg-[#22D3EE]/5 blur-[100px]" />
+      </div>
+
+      {/* ── Card ─────────────────────────────────────────────────────── */}
+      <div className="relative z-10 w-full max-w-md mx-auto ua-card overflow-hidden animate-fade-up">
         <div className="p-6 sm:p-8">
-          {/* Logo */}
+          {/* ── Step Progress ─────────────────────────────────────────── */}
+          <div className="flex items-center justify-center gap-2 mb-8">
+            {stepIcons.map((s, i) => {
+              const StepIcon = s.icon;
+              const isActive = step === i + 1;
+              const isDone = step > i + 1;
+              return (
+                <React.Fragment key={s.label}>
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#7C3AED] shadow-lg shadow-[#7C3AED]/30"
+                          : isDone
+                          ? "bg-[#7C3AED]/20"
+                          : "bg-white/[0.06] border border-white/[0.08]"
+                      }`}
+                    >
+                      <StepIcon
+                        className={`w-4.5 h-4.5 ${
+                          isActive
+                            ? "text-white"
+                            : isDone
+                            ? "text-[#7C3AED]"
+                            : "text-white/30"
+                        }`}
+                      />
+                    </div>
+                    <span
+                      className={`text-[10px] font-medium ${
+                        isActive
+                          ? "text-white"
+                          : isDone
+                          ? "text-[#7C3AED]"
+                          : "text-white/30"
+                      }`}
+                    >
+                      {s.label}
+                    </span>
+                  </div>
+                  {i < stepIcons.length - 1 && (
+                    <div
+                      className={`w-12 h-px mt-[-18px] transition-all duration-300 ${
+                        step > i + 1 ? "bg-[#7C3AED]/40" : "bg-white/[0.08]"
+                      }`}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+
+          {/* ── Logo + Subtitle ───────────────────────────────────────── */}
           <div className="text-center mb-8">
             <h1
-              className="text-4xl font-extrabold text-white drop-shadow-lg"
-              style={{ fontFamily: "Inter,sans-serif" }}
+              className="text-3xl font-extrabold text-white"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
-              Urban<span className="text-blue-400">Astro</span>
+              Urban<span className="text-[#7C3AED]">Astro</span>
             </h1>
-            <p className="text-white/70 mt-2">
+            <p className="text-white/50 mt-2 text-sm">
               {step === 1 && "Login with your mobile number"}
               {step === 2 && "Enter the OTP sent to your phone"}
               {step === 3 && "Almost there! Tell us your name"}
             </p>
           </div>
 
-          {/* Error message */}
+          {/* ── Error message ─────────────────────────────────────────── */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-sm text-center">
+            <div className="mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
               {error}
             </div>
           )}
 
-          {/* ─── STEP 1: Phone Input ──────────────────────────────────────── */}
+          {/* ═══ STEP 1: Phone Input ═══════════════════════════════════ */}
           {step === 1 && (
             <form className="space-y-5" onSubmit={handleSendOtp}>
               <div>
-                <label className="text-sm text-white/60 mb-2 block">
+                <label className="text-sm text-white/50 mb-2 block font-medium">
                   Mobile Number
                 </label>
                 <div className="flex gap-2">
-                  <div className="flex items-center justify-center bg-white/5 border border-white/10 rounded-lg px-4 h-12 text-white/70 font-bold text-lg select-none shrink-0">
+                  <div className="flex items-center justify-center bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 h-12 text-white/60 font-bold text-lg select-none shrink-0">
                     +91
                   </div>
                   <input
@@ -293,7 +356,7 @@ const Login = () => {
                       setPhone(val);
                       setError("");
                     }}
-                    className="flex-1 bg-black/30 border border-white/10 rounded-lg h-12 px-4 text-white text-lg tracking-wider placeholder-white/30 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl h-12 px-4 text-white text-lg tracking-wider placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -301,14 +364,11 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading || phone.length < 10}
-                className="w-full h-12 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all flex items-center justify-center gap-2"
+                className="w-full h-12 ua-btn-primary justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
+                    <Loader2 className="w-5 h-5 animate-spin" />
                     Sending OTP...
                   </>
                 ) : (
@@ -316,20 +376,20 @@ const Login = () => {
                 )}
               </button>
 
-              <p className="text-center text-white/40 text-xs mt-3">
+              <p className="text-center text-white/30 text-xs mt-3">
                 We'll send a 6-digit verification code to this number
               </p>
             </form>
           )}
 
-          {/* ─── STEP 2: OTP Input ────────────────────────────────────────── */}
+          {/* ═══ STEP 2: OTP Input ═════════════════════════════════════ */}
           {step === 2 && (
             <form className="space-y-5" onSubmit={handleVerifyOtp}>
               {/* Phone display with edit */}
               <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-white/60 text-sm">
+                <span className="text-white/50 text-sm">
                   OTP sent to{" "}
-                  <span className="text-white font-bold">+91 {phone}</span>
+                  <span className="text-white font-semibold">+91 {phone}</span>
                 </span>
                 <button
                   type="button"
@@ -338,8 +398,9 @@ const Login = () => {
                     setOtp(["", "", "", "", "", ""]);
                     setError("");
                   }}
-                  className="text-blue-400 text-xs hover:underline"
+                  className="text-[#7C3AED] text-xs hover:text-[#a78bfa] transition-colors flex items-center gap-1"
                 >
+                  <ArrowLeft className="w-3 h-3" />
                   Change
                 </button>
               </div>
@@ -357,7 +418,7 @@ const Login = () => {
                     onChange={(e) => handleOtpChange(i, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(i, e)}
                     onPaste={i === 0 ? handleOtpPaste : undefined}
-                    className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold bg-black/30 border-2 border-white/15 rounded-xl text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 outline-none transition-all"
+                    className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold bg-white/[0.04] border-2 border-white/[0.1] rounded-xl text-white focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                   />
                 ))}
               </div>
@@ -365,14 +426,11 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading || otp.some((d) => d === "")}
-                className="w-full h-12 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all flex items-center justify-center gap-2"
+                className="w-full h-12 ua-btn-primary justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
+                    <Loader2 className="w-5 h-5 animate-spin" />
                     Verifying...
                   </>
                 ) : (
@@ -385,13 +443,13 @@ const Login = () => {
                 {countdown > 0 ? (
                   <p className="text-white/40 text-sm">
                     Resend OTP in{" "}
-                    <span className="text-blue-400 font-bold">{countdown}s</span>
+                    <span className="text-[#7C3AED] font-bold">{countdown}s</span>
                   </p>
                 ) : (
                   <button
                     type="button"
                     onClick={handleResend}
-                    className="text-blue-400 text-sm hover:underline"
+                    className="text-[#7C3AED] text-sm hover:text-[#a78bfa] transition-colors"
                   >
                     Didn't receive OTP? Resend
                   </button>
@@ -400,11 +458,11 @@ const Login = () => {
             </form>
           )}
 
-          {/* ─── STEP 3: Name Input (new users) ──────────────────────────── */}
+          {/* ═══ STEP 3: Name Input (new users) ════════════════════════ */}
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <label className="text-sm text-white/60 mb-2 block">
+                <label className="text-sm text-white/50 mb-2 block font-medium">
                   What should we call you?
                 </label>
                 <input
@@ -413,15 +471,25 @@ const Login = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   autoFocus
-                  className="w-full bg-black/30 border border-white/10 rounded-lg h-12 px-4 text-white placeholder-white/30 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl h-12 px-4 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                 />
               </div>
 
               <button
                 onClick={handleSaveName}
-                className="w-full h-12 bg-blue-500 hover:bg-blue-600 font-bold rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all"
+                disabled={loading}
+                className="w-full h-12 ua-btn-primary justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {name ? `Continue as ${name}` : "Skip & Continue"}
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Saving...
+                  </>
+                ) : name ? (
+                  `Continue as ${name}`
+                ) : (
+                  "Skip & Continue"
+                )}
               </button>
             </div>
           )}

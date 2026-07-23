@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Check, Lock, Clock, Shield, Sparkles, Tag, CheckCircle2 } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 
@@ -84,85 +85,54 @@ const SelectPlan = () => {
     navigate("/select-life-area");
   };
 
-  // Color mapping for gradients — we use inline styles for dynamic colors
-  const getGradient = (from, to) => {
-    const colorMap = {
-      "blue-600": "#2563eb", "indigo-600": "#4f46e5",
-      "purple-600": "#9333ea", "pink-600": "#db2777",
-      "emerald-600": "#059669", "teal-600": "#0d9488",
-      "amber-500": "#f59e0b", "orange-500": "#f97316",
-      "rose-500": "#f43f5e", "red-600": "#dc2626",
-      "cyan-500": "#06b6d4",
-    };
-    return `linear-gradient(135deg, ${colorMap[from] || "#2563eb"}, ${colorMap[to] || "#4f46e5"})`;
-  };
-
-  const getBorderColor = (from) => {
-    const map = {
-      "blue-600": "rgba(59,130,246,0.5)", "purple-600": "rgba(147,51,234,0.5)",
-      "emerald-600": "rgba(5,150,105,0.5)", "amber-500": "rgba(245,158,11,0.5)",
-      "rose-500": "rgba(244,63,94,0.5)", "cyan-500": "rgba(6,182,212,0.5)",
-    };
-    return map[from] || "rgba(59,130,246,0.5)";
-  };
-
-  const getGlowColor = (from) => {
-    const map = {
-      "blue-600": "0 0 25px rgba(59,130,246,0.2)", "purple-600": "0 0 25px rgba(147,51,234,0.3)",
-      "emerald-600": "0 0 25px rgba(5,150,105,0.2)", "amber-500": "0 0 25px rgba(245,158,11,0.2)",
-      "rose-500": "0 0 25px rgba(244,63,94,0.2)", "cyan-500": "0 0 25px rgba(6,182,212,0.2)",
-    };
-    return map[from] || "0 0 25px rgba(59,130,246,0.2)";
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-[#7C3AED] border-t-transparent rounded-full"></div>
       </div>
     );
   }
 
   if (plans.length === 0) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-white">
         <div className="text-center">
-          <span className="material-symbols-outlined text-5xl text-gray-600 mb-4 block">sell</span>
-          <p className="text-gray-400 text-lg">No plans available right now. Please check back later.</p>
+          <Tag className="w-12 h-12 text-white/30 mx-auto mb-4" />
+          <p className="text-white/50 text-lg">No plans available right now. Please check back later.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-[#030014] font-display text-gray-200">
-      {/* Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-transparent to-transparent pointer-events-none"></div>
+    <div className="relative flex flex-col min-h-screen font-display text-gray-200">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
 
       <div className="relative z-10 flex flex-col flex-grow items-center justify-start pt-20 p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-2xl mx-auto">
           {/* Step progress */}
-          <div className="text-center mb-4">
-            <p className="text-sm text-gray-400">Step 2 of 5</p>
-            <div className="w-full bg-gray-700 rounded-full h-1.5 mt-1">
+          <div className="text-center mb-6">
+            <p className="text-xs font-semibold text-white/40 uppercase tracking-widest">Step 1 of 4</p>
+            <div className="w-full bg-white/[0.08] rounded-full h-1.5 mt-2">
               <div
-                className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
-                style={{ width: "40%" }}
+                className="bg-[#7C3AED] h-1.5 rounded-full transition-all duration-500"
+                style={{ width: "25%" }}
               ></div>
             </div>
           </div>
 
           {/* Title */}
-          <header className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">
-              Choose Your Plan
+          <header className="text-center mb-8 animate-fade-up">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Choose Your <span className="text-[#7C3AED]">Plan</span>
             </h1>
-            <p className="text-gray-400 mt-2">
-              Select the consultation that's right for you
+            <p className="text-white/50 mt-2 text-sm sm:text-base">
+              Select the consultation that fits your requirements
             </p>
           </header>
-
-
 
           {/* Plans Grid */}
           <div className={`grid grid-cols-1 ${plans.length > 1 ? "sm:grid-cols-2" : ""} gap-4`}>
@@ -172,83 +142,69 @@ const SelectPlan = () => {
                 <div
                   key={plan._id}
                   onClick={() => setSelected(plan._id)}
-                  className="relative cursor-pointer rounded-2xl p-5 transition-all duration-300 border-2 backdrop-blur-sm"
-                  style={{
-                    borderColor: isSelected
-                      ? getBorderColor(plan.colorFrom)
-                      : "rgba(255,255,255,0.1)",
-                    backgroundColor: isSelected
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(255,255,255,0.05)",
-                    boxShadow: isSelected ? getGlowColor(plan.colorFrom) : "none",
-                  }}
+                  className={`ua-card relative cursor-pointer p-6 transition-all duration-300 ${
+                    isSelected
+                      ? "border-[#7C3AED] bg-white/[0.06] shadow-lg shadow-[#7C3AED]/20 scale-[1.01]"
+                      : "hover:border-white/20 hover:bg-white/[0.04]"
+                  }`}
                 >
                   {/* Badge */}
                   {plan.badge && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                      <span className="bg-[#7C3AED] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-[#7C3AED]/30 whitespace-nowrap">
                         {plan.badge}
                       </span>
                     </div>
                   )}
 
                   {/* Selection indicator */}
-                  <div className="absolute top-4 right-4">
+                  <div className="absolute top-5 right-5">
                     <div
                       className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                         isSelected
-                          ? "border-blue-400 bg-blue-500"
-                          : "border-gray-600"
+                          ? "border-[#7C3AED] bg-[#7C3AED]"
+                          : "border-white/20"
                       }`}
                     >
-                      {isSelected && (
-                        <span className="material-symbols-outlined text-white text-sm">
-                          check
-                        </span>
-                      )}
+                      {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
                     </div>
                   </div>
 
                   {/* Icon + Name */}
                   <div className="flex items-center gap-3 mb-4 mt-1">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-                      style={{ background: getGradient(plan.colorFrom, plan.colorTo) }}
-                    >
-                      <span className="material-symbols-outlined text-white text-xl">
-                        {plan.icon}
-                      </span>
+                    <div className="w-10 h-10 rounded-xl bg-[#7C3AED]/10 border border-[#7C3AED]/20 flex items-center justify-center shadow-lg">
+                      <Sparkles className="w-5 h-5 text-[#7C3AED]" />
                     </div>
-                    <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                    <h3 className="text-lg font-bold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      {plan.name}
+                    </h3>
                   </div>
 
                   {/* Pricing */}
                   <div className="mb-4">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-gray-500 line-through text-lg">
+                      <span className="text-white/40 line-through text-lg font-medium">
                         ₹{plan.originalPrice}
                       </span>
-                      <span className="text-3xl font-extrabold text-white">
+                      <span className="text-3xl font-extrabold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                         ₹{plan.price}
                       </span>
                     </div>
                     {featuredCoupon && (
-                      <div className="mt-1">
-                        <span className="inline-block bg-green-500/20 text-green-400 text-xs font-bold px-2 py-0.5 rounded-full">
-                          ₹{featuredCoupon.value} OFF with {featuredCoupon.code}
+                      <div className="mt-1.5">
+                        <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                          <Tag className="w-3 h-3" /> ₹{featuredCoupon.value} OFF with {featuredCoupon.code}
                         </span>
                       </div>
                     )}
                   </div>
 
                   {/* Features */}
-                  <ul className="space-y-2">
+                  <ul className="space-y-2.5 pt-2 border-t border-white/[0.06]">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-green-400 text-base mt-0.5">
-                          check_circle
-                        </span>
-                        <span className="text-sm text-gray-300">{feature}</span>
+                      <li key={idx} className="flex items-start gap-2.5 text-sm text-white/70">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -262,11 +218,7 @@ const SelectPlan = () => {
             <button
               onClick={handleProceed}
               disabled={!selected}
-              className={`w-full h-14 font-bold rounded-xl relative overflow-hidden group transition-all duration-300 text-lg ${
-                selected
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02]"
-                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
-              }`}
+              className="w-full h-14 ua-btn-primary justify-center text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#7C3AED]/25"
             >
               Continue with{" "}
               {selected
@@ -277,22 +229,18 @@ const SelectPlan = () => {
           </div>
 
           {/* Trust signals */}
-          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">lock</span>
+          <div className="mt-6 flex items-center justify-center gap-6 text-xs text-white/40">
+            <span className="flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-[#22D3EE]" />
               Secure Payment
             </span>
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">
-                schedule
-              </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-[#22D3EE]" />
               24hr Delivery
             </span>
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">
-                verified
-              </span>
-              Expert Astrologers
+            <span className="flex items-center gap-1.5">
+              <Shield className="w-3.5 h-3.5 text-[#22D3EE]" />
+              Verified Astrologers
             </span>
           </div>
         </div>

@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Heart,
+  GraduationCap,
+  Briefcase,
+  TrendingUp,
+  Users,
+  DollarSign,
+  HeartHandshake,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
 
 const lifeAreas = [
-  { icon: "favorite", label: "Love", color: "from-rose-500/20 to-pink-500/20 text-rose-400 border-rose-500/20 glow-rose-500/30" },
-  { icon: "school", label: "Education", color: "from-blue-500/20 to-indigo-500/20 text-blue-400 border-blue-500/20 glow-blue-500/30" },
-  { icon: "work", label: "Job", color: "from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/20 glow-amber-500/30" },
-  { icon: "trending_up", label: "Career", color: "from-teal-500/20 to-emerald-500/20 text-teal-400 border-teal-500/20 glow-teal-500/30" },
-  { icon: "group", label: "Relationship", color: "from-purple-500/20 to-pink-500/20 text-purple-400 border-purple-500/20 glow-purple-500/30" },
-  { icon: "payments", label: "Money", color: "from-emerald-500/20 to-teal-500/20 text-emerald-400 border-emerald-500/20 glow-emerald-500/30" },
-  { icon: "favorite_border", label: "Marriage", color: "from-red-500/20 to-rose-500/20 text-red-400 border-red-500/20 glow-red-500/30" },
-  { icon: "savings", label: "Wealth", color: "from-yellow-500/20 to-amber-500/20 text-yellow-400 border-yellow-500/20 glow-yellow-500/30" },
+  { icon: Heart, label: "Love" },
+  { icon: GraduationCap, label: "Education" },
+  { icon: Briefcase, label: "Job" },
+  { icon: TrendingUp, label: "Career" },
+  { icon: Users, label: "Relationship" },
+  { icon: DollarSign, label: "Money" },
+  { icon: HeartHandshake, label: "Marriage" },
+  { icon: Sparkles, label: "Wealth" },
 ];
 
 const SelectLifeArea = () => {
@@ -61,54 +72,60 @@ const SelectLifeArea = () => {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-[#030014] font-display text-gray-200">
-      {/* Background Starfield effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/20 via-transparent to-transparent pointer-events-none z-0"></div>
+    <div className="relative flex flex-col min-h-screen font-display text-gray-200">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
 
       <div className="relative z-10 flex flex-col flex-grow items-center justify-start pt-20 p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-2xl mx-auto">
           {/* Step progress bar */}
           <div className="text-center mb-6">
-            <p className="text-sm text-gray-400">Step 3 of 5</p>
-            <div className="w-full bg-gray-800 rounded-full h-1.5 mt-1">
-              <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-300" style={{ width: "60%" }}></div>
+            <p className="text-xs font-semibold text-white/40 uppercase tracking-widest">Step 2 of 4</p>
+            <div className="w-full bg-white/[0.08] rounded-full h-1.5 mt-2">
+              <div
+                className="bg-[#7C3AED] h-1.5 rounded-full transition-all duration-500"
+                style={{ width: "50%" }}
+              ></div>
             </div>
           </div>
 
           {/* Title */}
-          <header className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Choose Your Life Areas
+          <header className="text-center mb-8 animate-fade-up">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Choose Your <span className="text-[#7C3AED]">Life Areas</span>
             </h1>
-            <p className="text-gray-400 mt-2 text-sm sm:text-base">
-              Select up to <strong className="text-blue-400">{maxSelections}</strong> areas you want astrological guidance on.
+            <p className="text-white/50 mt-2 text-sm sm:text-base">
+              Select up to <strong className="text-[#22D3EE] font-semibold">{maxSelections}</strong> areas you want astrological guidance on.
             </p>
           </header>
 
           {/* Options grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {lifeAreas.map((area) => {
+              const IconComponent = area.icon;
               const isSelected = selected.includes(area.label);
               return (
                 <div
                   key={area.label}
                   onClick={() => toggleSelection(area.label)}
-                  className={`flex flex-col items-center justify-center p-5 rounded-2xl cursor-pointer border-2 transition-all duration-300 backdrop-blur-md select-none ${
+                  className={`ua-card p-5 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 select-none ${
                     isSelected
-                      ? `border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.3)] scale-[1.03]`
-                      : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
+                      ? "border-[#7C3AED] bg-white/[0.06] shadow-lg shadow-[#7C3AED]/20 scale-[1.03]"
+                      : "hover:border-white/20 hover:bg-white/[0.04]"
                   }`}
                 >
                   <div
-                    className={`flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-br ${
-                      isSelected ? "from-blue-500 to-indigo-600 text-white" : "bg-white/5 text-gray-400"
-                    } mb-3 shadow-lg`}
+                    className={`flex items-center justify-center h-12 w-12 rounded-xl transition-all duration-300 ${
+                      isSelected
+                        ? "bg-[#7C3AED] text-white shadow-md shadow-[#7C3AED]/30"
+                        : "bg-white/[0.06] text-white/50"
+                    } mb-3`}
                   >
-                    <span className="material-symbols-outlined text-3xl">
-                      {area.icon}
-                    </span>
+                    <IconComponent className="w-6 h-6" />
                   </div>
-                  <p className="font-bold text-center text-sm sm:text-base text-white">
+                  <p className="font-semibold text-center text-sm text-white">
                     {area.label}
                   </p>
                 </div>
@@ -117,8 +134,8 @@ const SelectLifeArea = () => {
           </div>
 
           {/* Prompt Selection Info */}
-          <div className="text-center text-xs text-gray-500 mt-5">
-            Selected: {selected.length} of {maxSelections} allowed areas
+          <div className="text-center text-xs text-white/40 mt-6">
+            Selected: <span className="text-white font-semibold">{selected.length}</span> of <span className="text-white font-semibold">{maxSelections}</span> allowed areas
           </div>
 
           {/* Proceed button */}
@@ -126,13 +143,10 @@ const SelectLifeArea = () => {
             <button
               onClick={handleProceed}
               disabled={selected.length === 0}
-              className={`w-full h-14 font-extrabold rounded-xl relative overflow-hidden group transition-all duration-300 text-lg ${
-                selected.length >= 1
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.01]"
-                  : "bg-gray-800 text-gray-500 cursor-not-allowed"
-              }`}
+              className="w-full h-14 ua-btn-primary justify-center text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#7C3AED]/25"
             >
-              <span className="relative z-10">Proceed to Ask Questions</span>
+              <span>Proceed to Ask Questions</span>
+              <ArrowRight className="w-5 h-5 ml-1" />
             </button>
           </div>
         </div>

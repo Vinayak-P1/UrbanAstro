@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Lightbulb, Lock, ArrowLeft, ArrowRight } from "lucide-react";
 
 const QUESTION_TEMPLATES = {
   Love: [
@@ -161,46 +162,53 @@ const AskQuestion = () => {
   };
 
   return (
-    <div className="font-display bg-[#030014] text-gray-200 min-h-screen flex flex-col items-center pt-24 pb-12 relative overflow-hidden">
-      {/* Background Starfield effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/20 via-transparent to-transparent pointer-events-none z-0"></div>
+    <div className="font-display text-gray-200 min-h-screen flex flex-col items-center pt-24 pb-12 relative overflow-hidden">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
 
       <div className="relative z-10 w-full max-w-2xl mx-auto px-4 flex flex-col">
         {/* Progress Bar */}
         <div className="w-full space-y-2 mb-8">
-          <p className="text-sm text-gray-400">Step 4 of 5</p>
-          <div className="w-full bg-gray-800 rounded-full h-1.5 mt-1">
-            <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "80%" }}></div>
+          <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-widest text-white/40">
+            <span>Step 4 of 4</span>
+            <span className="text-[#7C3AED]">100%</span>
+          </div>
+          <div className="w-full bg-white/[0.08] rounded-full h-1.5 mt-1">
+            <div className="bg-[#7C3AED] h-1.5 rounded-full transition-all duration-500" style={{ width: "100%" }}></div>
           </div>
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-2 text-white">
-          What Would You Like to Ask?
-        </h2>
-        <p className="text-center text-gray-400 text-sm mb-6">
-          Your plan allows up to <strong className="text-blue-400">{questionCount}</strong> questions.
-        </p>
+        <header className="text-center mb-6 animate-fade-up">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2 text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            What Would You Like to <span className="text-[#7C3AED]">Ask?</span>
+          </h2>
+          <p className="text-center text-white/50 text-sm">
+            Your plan allows up to <strong className="text-[#22D3EE] font-semibold">{questionCount}</strong> questions.
+          </p>
+        </header>
 
         {/* Question Fields */}
         <div className="space-y-4 mb-6">
           {questions.map((q, idx) => (
             <div
               key={idx}
-              className={`rounded-xl border p-4 bg-white/5 backdrop-blur-md transition-all duration-300 ${
+              className={`ua-card p-5 cursor-pointer transition-all duration-300 ${
                 activeFieldIdx === idx
-                  ? "border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)] bg-white/8"
-                  : "border-white/10"
+                  ? "border-[#7C3AED] bg-white/[0.06] shadow-lg shadow-[#7C3AED]/20"
+                  : "hover:border-white/20"
               }`}
               onClick={() => setActiveFieldIdx(idx)}
             >
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-white/40 uppercase tracking-wider">
                   Question {idx + 1}
                 </label>
                 {activeFieldIdx === idx && (
-                  <span className="text-[10px] bg-blue-500/20 text-blue-400 font-bold px-2 py-0.5 rounded-full">
-                    Active Input
+                  <span className="text-[10px] bg-[#7C3AED]/20 text-[#22D3EE] font-semibold px-2.5 py-0.5 rounded-full border border-[#7C3AED]/30">
+                    Active Field
                   </span>
                 )}
               </div>
@@ -208,7 +216,7 @@ const AskQuestion = () => {
                 value={q || ""}
                 onChange={(e) => handleQuestionChange(idx, e.target.value)}
                 placeholder={`Ask question ${idx + 1} here... (e.g. When will I buy my own house?)`}
-                className="w-full h-16 bg-transparent resize-none outline-none text-white text-sm sm:text-base placeholder-gray-600"
+                className="w-full h-20 bg-transparent resize-none outline-none text-white text-sm sm:text-base placeholder-white/25"
               ></textarea>
             </div>
           ))}
@@ -216,9 +224,9 @@ const AskQuestion = () => {
 
         {/* Suggested Questions Section */}
         {templates.length > 0 && (
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-amber-400 text-sm">tips_and_updates</span>
+          <div className="ua-card p-5 mb-8">
+            <h3 className="text-xs font-bold text-white/50 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Lightbulb className="w-4 h-4 text-amber-400" />
               Suggested Questions (Based on your topics)
             </h3>
             <div className="flex flex-col gap-2">
@@ -226,7 +234,7 @@ const AskQuestion = () => {
                 <button
                   key={i}
                   onClick={() => handleTemplateClick(tpl)}
-                  className="w-full text-left p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs sm:text-sm text-gray-300 hover:text-white transition duration-200"
+                  className="w-full text-left p-3 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl text-xs sm:text-sm text-white/70 hover:text-white transition duration-200"
                 >
                   💡 {tpl}
                 </button>
@@ -235,25 +243,27 @@ const AskQuestion = () => {
           </div>
         )}
 
-        <p className="text-[11px] sm:text-xs text-center text-gray-500 mb-6 flex items-center justify-center gap-1">
-          <span className="material-symbols-outlined text-xs">lock</span>
+        <p className="text-xs text-center text-white/40 mb-6 flex items-center justify-center gap-1.5">
+          <Lock className="w-3.5 h-3.5 text-[#22D3EE]" />
           Your questions and secrets are 100% confidential and secure with us.
         </p>
 
         {/* Footer Buttons */}
-        <footer className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+        <footer className="grid grid-cols-2 gap-4 pt-4 border-t border-white/[0.06]">
           <button
             onClick={handleBack}
-            className="w-full py-3 px-4 rounded-xl font-bold text-gray-400 border-2 border-white/10 hover:bg-white/5 hover:text-white transition duration-300 text-sm sm:text-base"
+            className="w-full h-12 ua-btn-ghost justify-center text-sm sm:text-base"
           >
-            Back
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back</span>
           </button>
 
           <button
             onClick={handleProceed}
-            className="w-full py-3 px-4 rounded-xl font-extrabold bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-2xl hover:shadow-blue-500/30 transition duration-300 text-sm sm:text-base"
+            className="w-full h-12 ua-btn-primary justify-center text-sm sm:text-base shadow-lg shadow-[#7C3AED]/25"
           >
-            Proceed to Payment
+            <span>Proceed to Payment</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </footer>
       </div>

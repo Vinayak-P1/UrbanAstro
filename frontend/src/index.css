@@ -1,124 +1,274 @@
 @import "tailwindcss";
 
-.cosmic-gradient {
-    background-image: linear-gradient(to right, #9333ea, #3b82f6, #14b8a6);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-.glow {
-    text-shadow: 0 0 8px rgba(147, 51, 234, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
-}
-/* ... (btn-shine, star-dust, orbit-lines ki baaki CSS yahan paste karein) ... */
+/* ════════════════════════════════════════════════════════════════════════════
+   URBANASTRO — DESIGN SYSTEM TOKENS
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* 3. Dark Mode Fix: Ensure body gets the dark background */
+:root {
+  --ua-bg:        #050816;
+  --ua-bg-card:   #0b1022;
+  --ua-primary:   #7C3AED;
+  --ua-primary-hover: #6D28D9;
+  --ua-accent:    #22D3EE;
+  --ua-border:    rgba(255, 255, 255, 0.08);
+  --ua-text:      #ffffff;
+  --ua-text-muted: rgba(255, 255, 255, 0.50);
+  --ua-text-dim:  rgba(255, 255, 255, 0.40);
+  --ua-radius:    20px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   GLOBAL RESETS
+   ════════════════════════════════════════════════════════════════════════════ */
+
 html, body, #root {
-    background-color: #111121; 
-    color: #f6f6f8; /* Base text color for dark mode */
-    max-width: 100%;
-    overflow-x: hidden;
-}
-@keyframes stars {
-  0% {
-    background-position: 0px 0px, 40px 60px, 130px 270px, 70px 100px;
-  }
-  100% {
-    background-position: 1000px 1000px, 1040px 1060px, 1130px 1270px, 1070px 1100px;
-  }
+  background-color: var(--ua-bg);
+  color: var(--ua-text);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LEGACY UTILITY CLASSES (preserved for backward compatibility)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.cosmic-gradient {
+  background-image: linear-gradient(to right, #7C3AED, #22D3EE);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glow {
+  text-shadow: 0 0 8px rgba(124, 58, 237, 0.4), 0 0 20px rgba(34, 211, 238, 0.3);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   GLASS CARD — Reusable card component
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.ua-card {
+  background: var(--ua-bg-card);
+  border: 1px solid var(--ua-border);
+  border-radius: var(--ua-radius);
+}
+
+.ua-card-hover {
+  transition: all 0.2s ease;
+}
+.ua-card-hover:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.ua-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: var(--ua-primary);
+  color: white;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+.ua-btn-primary:hover {
+  background: var(--ua-primary-hover);
+}
+.ua-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.ua-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.ua-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  background: rgba(255, 255, 255, 0.04);
+}
+.ua-btn-ghost:active {
+  transform: scale(0.98);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION LABEL — Purple pill badge for section headers
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.ua-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.ua-section-label span.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ua-primary);
+}
+
+.ua-section-label span.text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ua-primary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   BADGE — Pill badges with color variants
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.ua-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+.ua-badge-default  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.08); }
+.ua-badge-success  { background: rgba(16,185,129,0.1);  color: #34d399; border-color: rgba(16,185,129,0.2); }
+.ua-badge-warning  { background: rgba(245,158,11,0.1);  color: #fbbf24; border-color: rgba(245,158,11,0.2); }
+.ua-badge-accent   { background: rgba(34,211,238,0.1);  color: #22D3EE; border-color: rgba(34,211,238,0.2); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Starfield (legacy) */
+@keyframes stars {
+  0%   { background-position: 0px 0px, 40px 60px, 130px 270px, 70px 100px; }
+  100% { background-position: 1000px 1000px, 1040px 1060px, 1130px 1270px, 1070px 1100px; }
+}
 .animate-stars {
   animation: stars 60s linear infinite;
 }
 
-/* Cross-browser backdrop-filter support for older Safari / mobile browsers */
-.backdrop-blur-sm, .backdrop-blur, .backdrop-blur-md, .backdrop-blur-xl, .backdrop-blur-lg {
+/* Fade Up — staggered entrance animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+.animate-fade-up-d1 { animation-delay: 0.05s; }
+.animate-fade-up-d2 { animation-delay: 0.10s; }
+.animate-fade-up-d3 { animation-delay: 0.15s; }
+.animate-fade-up-d4 { animation-delay: 0.20s; }
+.animate-fade-up-d5 { animation-delay: 0.25s; }
+.animate-fade-up-d6 { animation-delay: 0.30s; }
+
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SCROLLBAR HIDE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.scrollbar-hide { scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   CROSS-BROWSER FIXES (preserved from original)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Cross-browser backdrop-filter support */
+.backdrop-blur-sm, .backdrop-blur, .backdrop-blur-md, .backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-2xl {
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
-/* Mobile overlay fixes: some browsers (Samsung Internet, iOS Safari)
-   stack semi-transparent gradients and dark overlays differently,
-   producing an overly-faded appearance. Reduce opacity of full-screen
-   gradient and black overlays on small screens to preserve readability. */
-@media (max-width: 768px) {
-  /* Only target full-viewport overlay elements to avoid affecting buttons */
-  .absolute.inset-0[class*="bg-gradient-to"] {
-    opacity: 0.45 !important;
-    pointer-events: none;
-  }
-
-  .absolute.inset-0[class*="bg-[radial-gradient"] {
-    opacity: 0.25 !important;
-    pointer-events: none;
-  }
-
-  .absolute.inset-0[class*="bg-black"] {
-    opacity: 0.25 !important;
-    pointer-events: none;
-  }
-}
-
-/* Stronger mobile adjustments to combat browser stacking issues on
-   Samsung Internet and iOS Safari. These only apply on small screens. */
-@media (max-width: 768px) {
-  /* further reduce full-screen gradient/radial opacity */
-  .absolute.inset-0[class*="bg-gradient-to"] {
-    opacity: 0.22 !important;
-  }
-  .absolute.inset-0[class*="bg-[radial-gradient"] {
-    opacity: 0.12 !important;
-  }
-  .absolute.inset-0[class*="bg-black"] {
-    opacity: 0.12 !important;
-  }
-
-  /* Reduce blur intensity on mobile so overlays don't wash content */
-  .backdrop-blur-sm, .backdrop-blur, .backdrop-blur-md, .backdrop-blur-xl, .backdrop-blur-lg {
-    -webkit-backdrop-filter: blur(2px) !important;
-    backdrop-filter: blur(2px) !important;
-  }
-
-  /* Target rounded translucent cards (keep buttons unaffected) */
-  [class*="bg-white/"][class*="rounded"] {
-    background-color: rgba(255,255,255,0.04) !important;
-  }
-
-  /* Reduce starfield intensity when used as a full-screen background */
-  .star-bg > .animate-stars {
-    opacity: 0.25 !important;
-  }
-}
-
-/* Chrome/Safari browser Autofill color overrides */
+/* Chrome/Safari Autofill color overrides */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-text-fill-color: #ffffff !important;
-  -webkit-box-shadow: 0 0 0px 1000px #0c0a24 inset !important;
-  box-shadow: 0 0 0px 1000px #0c0a24 inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--ua-bg) inset !important;
+  box-shadow: 0 0 0px 1000px var(--ua-bg) inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Ensure any element that uses the project's dark background utility
-   renders text with high contrast. Some browsers (Samsung Internet,
-   iOS Safari) apply color rendering differently for CSS variables
-   or 'dark:' variants — force readable text for elements that include
-   the dark background utility class in their class list. */
+/* Mobile overlay fixes */
+@media (max-width: 768px) {
+  .absolute.inset-0[class*="bg-gradient-to"] {
+    opacity: 0.22 !important;
+    pointer-events: none;
+  }
+  .absolute.inset-0[class*="bg-[radial-gradient"] {
+    opacity: 0.12 !important;
+    pointer-events: none;
+  }
+  .absolute.inset-0[class*="bg-black"] {
+    opacity: 0.12 !important;
+    pointer-events: none;
+  }
+  .backdrop-blur-sm, .backdrop-blur, .backdrop-blur-md, .backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-2xl {
+    -webkit-backdrop-filter: blur(2px) !important;
+    backdrop-filter: blur(2px) !important;
+  }
+}
+
+/* Dark background text legibility */
 [class*="bg-background-dark"] {
   color: #f6f6f8 !important;
 }
-
-/* If children use low-contrast utility classes (e.g. text-gray-900),
-   override them inside dark background containers to maintain legibility. */
 [class*="bg-background-dark"] .text-gray-900,
 [class*="bg-background-dark"] .text-slate-800,
 [class*="bg-background-dark"] .text-gray-800 {
   color: #f6f6f8 !important;
 }
-
-/* Also ensure headings inside dark containers are explicit white */
 [class*="bg-background-dark"] h1,
 [class*="bg-background-dark"] h2,
 [class*="bg-background-dark"] h3,
@@ -128,10 +278,7 @@ input:-webkit-autofill:active {
   color: #f6f6f8 !important;
 }
 
-/* Form field normalization for dark containers
-   Fixes inconsistent rendering of inputs/textareas across mobile
-   browsers (Samsung Internet / iOS Safari). Ensures box, border and
-   text colors look identical to Chrome's rendering. */
+/* Form field normalization for dark containers */
 [class*="bg-background-dark"] input[type="text"],
 [class*="bg-background-dark"] input[type="email"],
 [class*="bg-background-dark"] input[type="password"],
@@ -155,7 +302,6 @@ input:-webkit-autofill:active {
   color: rgba(255,255,255,0.45) !important;
 }
 
-/* Focus state: white border and subtle blue glow like Chrome */
 [class*="bg-background-dark"] input:focus,
 [class*="bg-background-dark"] textarea:focus,
 [class*="bg-background-dark"] select:focus,
@@ -163,10 +309,9 @@ input:-webkit-autofill:active {
 [class*="bg-background-dark"] .form-textarea:focus {
   outline: none !important;
   border-color: rgba(255,255,255,0.98) !important;
-  box-shadow: 0 6px 18px rgba(59,130,246,0.12) !important;
+  box-shadow: 0 6px 18px rgba(124,58,237,0.12) !important;
 }
 
-/* Ensure rounded input borders appear consistent (avoid inner shadows) */
 [class*="bg-background-dark"] .form-input,
 [class*="bg-background-dark"] .form-textarea {
   border-radius: 12px !important;

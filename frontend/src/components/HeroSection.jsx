@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Sparkles, ChevronRight, Shield, Users, Star, Zap } from "lucide-react";
 
 const HeroSection = () => {
   const { user } = useContext(AuthContext);
@@ -14,29 +15,79 @@ const HeroSection = () => {
     }
   };
 
+  const stats = [
+    { value: "10K+", label: "Readings Delivered" },
+    { value: "50+", label: "Verified Experts" },
+    { value: "4.9", label: "User Rating" },
+    { value: "98%", label: "Satisfaction" },
+  ];
+
   return (
-    <section
-      className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center text-center p-6 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          'linear-gradient(rgba(17,17,33,0.7) 0%, rgba(17,17,33,0.9) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZ4bT9nUbcRu4bQuLc0LVtxtwwR8_XXBG6MW2miPWpgziWkzTSRjbqYtUqe5-17ApmhaO2V1RIp3woJ04GoPhlDI9Ly4kjx08IrjP0yxgFPph_oB0mc4k-v5mbypCIzDDXxqAbfq13wMOkinmxIz7x1BHequKQpNfycohcHMh4FiVhu9T-coUTkp36TkUtcgUza878zaSl07Xxq8Y0fQS0ELyFjUq9A0XU_3pcdMJzFbNj-1AB8kCk76-J6z-1-6_XmgdeL69eBb2a")',
-      }}
-    >
-      <div className="max-w-3xl mx-auto flex flex-col items-center gap-6 pt-16 md:pt-0">
-        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tighter">
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-24 pb-24 overflow-hidden">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+        <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-[#22D3EE]/5 blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-[#7C3AED]/5 blur-[80px]" />
+      </div>
+
+      {/* ── Main Content ─────────────────────────────────────────────── */}
+      <div className="relative z-10 max-w-5xl mx-auto animate-fade-up">
+        {/* Section Label Pill */}
+        <div className="ua-section-label mb-8">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
+          <span className="text-xs font-semibold text-white/60 tracking-widest uppercase">
+            Backed by ancient science. Built for 2026.
+          </span>
+        </div>
+
+        {/* Headline */}
+        <h1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight mb-6"
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        >
           Unlock Your{" "}
-          <span className="cosmic-gradient glow">Future Clarity.</span>
+          <span className="text-[#7C3AED]">Future Clarity.</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-xl">
+
+        {/* Subheadline */}
+        <p className="text-base sm:text-lg md:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed mb-10 font-light">
           Expert guidance on career, love, job, health, money, marriage,
           relationship and education from veteran astrologers.
         </p>
-        <button
-          onClick={handleConsultationClick}
-          className="btn-shine inline-block bg-blue-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-[0_0_15px_rgba(0,123,255,0.5)] hover:shadow-[0_0_25px_rgba(0,123,255,0.8)] transition-all duration-300"
-        >
-          Reveal Your Celestial Path
-        </button>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={handleConsultationClick}
+            className="ua-btn-primary text-base px-8 py-4"
+          >
+            <Sparkles className="w-4 h-4" />
+            Reveal Your Celestial Path
+          </button>
+          <button
+            onClick={() => navigate("/astrologers")}
+            className="ua-btn-ghost text-base px-8 py-4"
+          >
+            Talk to an Astrologer
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* ── Stats Row ────────────────────────────────────────────────── */}
+      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-white/[0.06] rounded-2xl overflow-hidden bg-white/[0.06] animate-fade-up animate-fade-up-d2">
+        {stats.map((s) => (
+          <div key={s.label} className="bg-[#050816] px-6 py-5 text-center">
+            <div
+              className="text-2xl font-bold text-white"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            >
+              {s.value}
+            </div>
+            <div className="text-xs text-white/40 mt-1">{s.label}</div>
+          </div>
+        ))}
       </div>
     </section>
   );

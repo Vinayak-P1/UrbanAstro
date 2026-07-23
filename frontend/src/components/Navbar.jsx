@@ -1,8 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { useNavigate, NavLink, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import menuIcon from "../assets/menu_icon.svg";
-import crossIcon from "../assets/cross_icon.png";
+import { Menu, X, ChevronDown, LogOut, Shield, LayoutDashboard, Globe } from "lucide-react";
 
 const Navbar = () => {
   const API = import.meta.env.VITE_API_URL || "";
@@ -34,85 +33,87 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const navLinkClass = ({ isActive }) =>
+    `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-150 cursor-pointer ${
+      isActive
+        ? "text-white bg-white/[0.06]"
+        : "text-white/50 hover:text-white/80 hover:bg-white/[0.03]"
+    }`;
+
   return (
-    <header className="absolute top-0 left-0 right-0 z-10 p-4">
-      <nav className="flex items-center justify-between max-w-7xl mx-auto">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] backdrop-blur-2xl bg-[#050816]/80">
+      <nav className="flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16">
+        {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-3 cursor-pointer no-underline"
+          className="flex items-center gap-2.5 cursor-pointer no-underline"
         >
-          <div className="flex items-center gap-2.5">
-            <img src="/favicon-96x96.png" alt="UrbanAstro Logo" className="w-9 h-9 object-contain" />
-            <span className="text-white text-2xl font-bold tracking-tight animate-fade-in" style={{fontFamily:'Inter,sans-serif'}}>
-              Urban<span className="text-blue-400">Astro</span>
-            </span>
+          <div className="w-8 h-8 rounded-lg bg-[#7C3AED] flex items-center justify-center">
+            <span className="text-white text-sm font-bold" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>U</span>
           </div>
+          <span
+            className="text-white font-bold text-base tracking-tight"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+          >
+            UrbanAstro
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6">
-          <NavLink
-            to="/astrologers"
-            className={({ isActive }) =>
-              `cursor-pointer transition ${
-                isActive
-                  ? 'text-blue-500 font-semibold'
-                  : 'text-white hover:text-sky-500'
-              }`
-            }
-          >
+        <div className="hidden lg:flex items-center gap-1">
+          <NavLink to="/astrologers" className={navLinkClass}>
             Astrologers
           </NavLink>
-          <NavLink
-            to="/my-bookings"
-            className={({ isActive }) =>
-              `cursor-pointer transition ${
-                isActive
-                  ? 'text-blue-500 font-semibold'
-                  : 'text-white hover:text-sky-500'
-              }`
-            }
-          >
+          <NavLink to="/my-bookings" className={navLinkClass}>
             My Bookings
           </NavLink>
-          <NavLink
-            to="/askai"
-            className={({ isActive }) =>
-              `cursor-pointer transition ${
-                isActive
-                  ? 'text-blue-500 font-semibold'
-                  : 'text-white hover:text-sky-500'
-              }`
-            }
-          >
+          <NavLink to="/askai" className={navLinkClass}>
             Ask AI
           </NavLink>
+        </div>
 
+        {/* Desktop Right Actions */}
+        <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <div className="relative" ref={dropdownRef}>
-              <img
-                src={
-                  user.profilePic
-      ? (user.profilePic.startsWith('http') ? user.profilePic : `${API}${user.profilePic}`)
-      : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                }
-                alt="profile"
-                className="w-10 h-10 rounded-full border-2 border-blue-400 cursor-pointer hover:opacity-90 transition"
+              <button
                 onClick={() => setDropdown((prev) => !prev)}
-              />
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/[0.08] hover:border-white/[0.15] hover:bg-white/[0.04] transition-all cursor-pointer"
+              >
+                <img
+                  src={
+                    user.profilePic
+                      ? user.profilePic.startsWith("http")
+                        ? user.profilePic
+                        : `${API}${user.profilePic}`
+                      : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                  }
+                  alt="profile"
+                  className="w-7 h-7 rounded-full object-cover"
+                />
+                <span className="text-white/70 text-sm font-medium max-w-[100px] truncate">
+                  {user.name || "User"}
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-white/30 transition-transform duration-200 ${dropdown ? "rotate-180" : ""}`} />
+              </button>
+
               {dropdown && (
-                <div className="absolute right-0 mt-2 w-44 bg-white text-black rounded-lg shadow-lg py-2 z-50">
-                  <p className="px-4 py-2 text-sm font-semibold border-b border-gray-200">
-                    {user.name || "User"}
-                  </p>
+                <div className="absolute right-0 mt-2 w-48 ua-card py-2 shadow-lg shadow-black/30 z-50">
+                  <div className="px-4 py-2.5 border-b border-white/[0.06]">
+                    <p className="text-sm font-semibold text-white truncate">
+                      {user.name || "User"}
+                    </p>
+                    <p className="text-xs text-white/30 truncate">{user.phone || ""}</p>
+                  </div>
                   {user.isAdmin && (
                     <button
                       onClick={() => {
                         navigate("/admin/dashboard");
                         setDropdown(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                      className="w-full text-left px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] flex items-center gap-2.5 transition-colors"
                     >
+                      <LayoutDashboard className="w-4 h-4" />
                       Admin Panel
                     </button>
                   )}
@@ -122,8 +123,9 @@ const Navbar = () => {
                         navigate("/");
                         setDropdown(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                      className="w-full text-left px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] flex items-center gap-2.5 transition-colors"
                     >
+                      <Globe className="w-4 h-4" />
                       Main Website
                     </button>
                   )}
@@ -132,8 +134,9 @@ const Navbar = () => {
                       logout();
                       navigate("/");
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2.5 text-sm text-white/60 hover:text-red-400 hover:bg-white/[0.04] flex items-center gap-2.5 transition-colors"
                   >
+                    <LogOut className="w-4 h-4" />
                     Logout
                   </button>
                 </div>
@@ -142,7 +145,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition"
+              className="ua-btn-primary"
             >
               Login / Sign Up
             </button>
@@ -150,103 +153,146 @@ const Navbar = () => {
         </div>
 
         {/* Mobile hamburger (hidden on auth pages) */}
-        {!(location.pathname === '/login' || location.pathname === '/signup') && (
+        {!(
+          location.pathname === "/login" ||
+          location.pathname === "/signup"
+        ) && (
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setShowMenu((s) => !s)}
               aria-label="Toggle menu"
-              className="p-2 rounded-md bg-white/10 hover:bg-white/20"
+              className="p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer"
             >
-              <img src={showMenu ? crossIcon : menuIcon} alt="menu" className="w-6 h-6" />
+              {showMenu ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         )}
+      </nav>
 
-        {/* Mobile menu overlay */}
-        {showMenu && (
-          <div 
-            className="fixed inset-0 lg:hidden"
-            style={{ backgroundColor: "#0B0B1A", zIndex: 9999, position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
-          >
-            <div className="p-6 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <Link to="/" onClick={() => setShowMenu(false)} className="flex items-center gap-2.5 cursor-pointer no-underline">
-                  <img src="/favicon-96x96.png" alt="UrbanAstro Logo" className="w-8 h-8 object-contain" />
-                  <span className="text-white text-xl font-bold tracking-tight" style={{fontFamily:'Inter,sans-serif'}}>
-                    Urban<span className="text-blue-400">Astro</span>
-                  </span>
-                </Link>
-                <button onClick={() => setShowMenu(false)} className="text-white">Close</button>
-              </div>
+      {/* Mobile menu overlay */}
+      {showMenu && (
+        <div
+          className="lg:hidden border-t border-white/[0.06] bg-[#050816]/95 backdrop-blur-2xl"
+          style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, zIndex: 9999 }}
+        >
+          <div className="p-6 flex flex-col gap-2 h-full">
+            <nav className="flex flex-col gap-1">
+              <NavLink
+                to="/astrologers"
+                onClick={() => setShowMenu(false)}
+                className={({ isActive }) =>
+                  `px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
+                    isActive
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                  }`
+                }
+              >
+                Astrologers
+              </NavLink>
+              <NavLink
+                to="/my-bookings"
+                onClick={() => setShowMenu(false)}
+                className={({ isActive }) =>
+                  `px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
+                    isActive
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                  }`
+                }
+              >
+                My Bookings
+              </NavLink>
+              <NavLink
+                to="/askai"
+                onClick={() => setShowMenu(false)}
+                className={({ isActive }) =>
+                  `px-4 py-3 text-sm font-medium rounded-xl transition-colors ${
+                    isActive
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                  }`
+                }
+              >
+                Ask AI
+              </NavLink>
+              {user && user.isAdmin && (
+                <button
+                  onClick={() => {
+                    navigate("/admin/dashboard");
+                    setShowMenu(false);
+                  }}
+                  className="px-4 py-3 text-sm font-medium text-white/60 hover:text-white hover:bg-white/[0.04] rounded-xl transition-colors text-left flex items-center gap-2.5"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  Admin Panel
+                </button>
+              )}
+            </nav>
 
-              <nav className="flex flex-col gap-4 mt-4">
-                
-                <NavLink
-                  to="/astrologers"
-                  onClick={() => setShowMenu(false)}
-                  className={({ isActive }) =>
-                    `cursor-pointer text-lg transition ${
-                      isActive
-                        ? 'text-blue-500 font-semibold'
-                        : 'text-white'
-                    }`
-                  }
-                >
-                  Astrologers
-                </NavLink>
-                <NavLink
-                  to="/my-bookings"
-                  onClick={() => setShowMenu(false)}
-                  className={({ isActive }) =>
-                    `cursor-pointer text-lg transition ${
-                      isActive
-                        ? 'text-blue-500 font-semibold'
-                        : 'text-white'
-                    }`
-                  }
-                >
-                  My Bookings
-                </NavLink>
-                <NavLink
-                  to="/askai"
-                  onClick={() => setShowMenu(false)}
-                  className={({ isActive }) =>
-                    `cursor-pointer text-lg transition ${
-                      isActive
-                        ? 'text-blue-500 font-semibold'
-                        : 'text-white'
-                    }`
-                  }
-                >
-                  Ask AI
-                </NavLink>
-                {user && user.isAdmin && (
-                  <button onClick={() => { navigate('/admin/dashboard'); setShowMenu(false); }} className="text-white text-lg text-left">Admin Panel</button>
-                )}
-              </nav>
-
-              <div className="mt-auto border-t border-white/10 pt-4">
-                {user ? (
-                  <div className="flex items-center gap-4">
-                    <img src={user.profilePic ? (user.profilePic.startsWith('http') ? user.profilePic : `${API}${user.profilePic}`) : "https://cdn-icons-png.flaticon.com/512/149/149071.png"} alt="profile" className="w-12 h-12 rounded-full" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-white">{user.name || user.phone || "User"}</div>
-                      <div className="flex gap-3 items-center mt-1">
-                        {user.isAdmin && (
-                          <button onClick={() => { navigate('/admin/dashboard'); setShowMenu(false); }} className="text-sm text-white/80 underline">Admin Panel</button>
-                        )}
-                        <button onClick={() => { logout(); setShowMenu(false); navigate('/'); }} className="text-sm text-white/80">Logout</button>
-                      </div>
+            <div className="mt-auto border-t border-white/[0.06] pt-4">
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <img
+                    src={
+                      user.profilePic
+                        ? user.profilePic.startsWith("http")
+                          ? user.profilePic
+                          : `${API}${user.profilePic}`
+                        : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                    }
+                    alt="profile"
+                    className="w-12 h-12 rounded-full object-cover border border-white/[0.08]"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-white truncate">
+                      {user.name || user.phone || "User"}
+                    </div>
+                    <div className="flex gap-4 items-center mt-2">
+                      {user.isAdmin && (
+                        <button
+                          onClick={() => {
+                            navigate("/admin/dashboard");
+                            setShowMenu(false);
+                          }}
+                          className="text-sm text-white/50 hover:text-white transition-colors"
+                        >
+                          Admin
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          logout();
+                          setShowMenu(false);
+                          navigate("/");
+                        }}
+                        className="text-sm text-white/50 hover:text-red-400 transition-colors flex items-center gap-1.5"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        Logout
+                      </button>
                     </div>
                   </div>
-                ) : (
-                  <button onClick={() => { navigate('/login'); setShowMenu(false); }} className="w-full py-3 bg-white text-black rounded-lg">Login / Sign Up</button>
-                )}
-              </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                    setShowMenu(false);
+                  }}
+                  className="w-full ua-btn-primary justify-center"
+                >
+                  Login / Sign Up
+                </button>
+              )}
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
     </header>
   );
 };

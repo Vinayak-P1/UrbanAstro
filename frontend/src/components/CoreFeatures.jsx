@@ -1,47 +1,70 @@
-// src/components/sections/CoreFeatures.js
+import React from "react";
+import { Shield, Users, Lightbulb } from "lucide-react";
 
-import React from 'react';
-import { VscWorkspaceTrusted } from "react-icons/vsc";
-import { RiUserCommunityFill } from "react-icons/ri";
-import { MdOutlineInsights } from "react-icons/md";
-// Custom component for a single feature item
-const FeatureItem = ({ icon, title, description }) => (
-    <div className="flex flex-col items-center gap-3">
-        {/* ICON CONTAINER: Yeh woh circle hai jo glow karta hai */}
-        <div className="w-16 h-16 rounded-full bg-[#007bff]/10 dark:bg-[#007bff]/20 flex items-center justify-center border border-primary/50">
-            {/* ICON: material-symbols-outlined ko icon prop se replace karein */}
-            <span className="material-symbols-outlined text-primary text-4xl">{icon}</span>
-        </div>
-        <h3 className="text-lg font-bold text-white mt-2">{title}</h3>
-        <p className="text-gray-300 text-sm max-w-[200px]">
-            {description}
-        </p>
-    </div>
-);
+const features = [
+  {
+    icon: Shield,
+    title: "Trusted Astrologers",
+    description:
+      "Our team of experienced astrologers provides accurate and insightful readings.",
+  },
+  {
+    icon: Users,
+    title: "Community Support",
+    description:
+      "Join a community of like-minded individuals exploring their cosmic paths.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Personalized Insights",
+    description:
+      "Receive personalized guidance based on your unique astrological profile.",
+  },
+];
 
 const CoreFeatures = () => {
-    return (
-        // Background ko dark/light mix rakha hai, ya poora dark kar dein
-        <section className="bg-background-dark/60 md:bg-background-dark/90 py-8 px-6"> 
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-                <FeatureItem 
-                    icon={<VscWorkspaceTrusted className='text-sky-400'  />}
-                    title="Trusted Astrologers" 
-                    description="Our team of experienced astrologers provides accurate and insightful readings."
-                />
-                <FeatureItem 
-                    icon={<RiUserCommunityFill className='text-sky-400' />}
-                    title="Community Support" 
-                    description="Join a community of like-minded individuals exploring their cosmic paths."
-                />
-                <FeatureItem 
-                    icon={<MdOutlineInsights className='text-sky-400' />}
-                    title="Personalized Insights" 
-                    description="Receive personalized guidance based on your unique astrological profile."
-                />
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      {/* Section Header */}
+      <div className="text-center mb-16 animate-fade-up">
+        <div className="ua-section-label">
+          <span className="dot" />
+          <span className="text">Capabilities</span>
+        </div>
+        <h2
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        >
+          Everything you need.
+          <br />
+          <span className="text-white/40">Nothing you don't.</span>
+        </h2>
+        <p className="text-white/40 text-lg max-w-xl mx-auto">
+          Three core pillars. One coherent platform. No noise.
+        </p>
+      </div>
+
+      {/* Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {features.map((f, i) => (
+          <div
+            key={f.title}
+            className={`ua-card p-7 group hover:-translate-y-1 transition-transform duration-300 animate-fade-up animate-fade-up-d${i + 1}`}
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#7C3AED]/10 flex items-center justify-center mb-5">
+              <f.icon className="w-5 h-5 text-[#7C3AED]" />
             </div>
-        </section>
-    );
+            <h3 className="text-white font-semibold text-base mb-2">
+              {f.title}
+            </h3>
+            <p className="text-white/40 text-sm leading-relaxed">
+              {f.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 };
 
 export default CoreFeatures;

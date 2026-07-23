@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Tag, Plus, Star, Check, Trash2, Ticket, CheckCircle2, XCircle } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 
@@ -103,18 +104,37 @@ const ManageCoupons = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0B1A] text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 py-8">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl sm:text-4xl font-bold mb-2">Manage Coupons</h1>
-        <p className="text-gray-400 mb-6">
-          Mark one coupon as <span className="text-amber-400 font-bold">⭐ Featured</span> to show
-          it on the plan selection banner and pre-fill it on the payment page.
-        </p>
+    <div className="min-h-screen font-display text-white pt-24 md:pt-28 lg:pt-32 px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="mb-6 animate-fade-up">
+          <div className="ua-section-label mb-3">
+            <span className="dot" />
+            <span className="text">Promotions</span>
+          </div>
+          <h1
+            className="text-3xl sm:text-4xl font-extrabold text-white"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+          >
+            Manage <span className="text-[#7C3AED]">Coupons</span>
+          </h1>
+          <p className="text-white/50 text-sm mt-1">
+            Mark one coupon as <span className="text-amber-400 font-semibold">⭐ Featured</span> to show
+            it on the plan selection banner and pre-fill it on the payment page.
+          </p>
+        </div>
 
         {/* Add Coupon Form */}
-        <div className="bg-white/5 border border-white/15 rounded-2xl p-5 mb-8">
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-blue-400">add_circle</span>
+        <div className="ua-card p-6 mb-8 animate-fade-up">
+          <h2
+            className="text-lg font-bold text-white mb-4 flex items-center gap-2"
+            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+          >
+            <Plus className="w-5 h-5 text-[#7C3AED]" />
             Add New Coupon
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -122,115 +142,111 @@ const ManageCoupons = () => {
               placeholder="Coupon Code"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value)}
-              className="bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none w-full"
+              className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm w-full font-mono uppercase"
             />
             <input
               type="number"
               placeholder="Discount Value"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
-              className="bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none w-full"
+              className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm w-full"
             />
             <select
               value={discountType}
               onChange={(e) => setDiscountType(e.target.value)}
-              className="bg-black/30 border border-white/20 rounded-lg px-3 py-3 text-white outline-none w-full cursor-pointer"
+              className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-3 text-white outline-none text-sm w-full cursor-pointer"
             >
-              <option value="flat">₹ Flat</option>
-              <option value="percent">% Off</option>
+              <option value="flat" className="bg-[#0b1022]">₹ Flat</option>
+              <option value="percent" className="bg-[#0b1022]">% Off</option>
             </select>
             <input
               type="number"
               placeholder="Max Uses (default: unlimited)"
               value={maxUses}
               onChange={(e) => setMaxUses(e.target.value)}
-              className="bg-black/30 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none w-full"
+              className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none text-sm w-full"
             />
             <button
               onClick={addCoupon}
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:shadow-lg hover:shadow-green-500/30 px-6 py-3 rounded-lg font-bold transition-all w-full cursor-pointer"
+              className="ua-btn-primary justify-center text-sm py-3 w-full"
             >
-              <span className="flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-base">add</span>
-                Add Coupon
-              </span>
+              <Plus className="w-4 h-4" />
+              Add Coupon
             </button>
           </div>
         </div>
 
         {/* Coupons Table / Mobile Cards */}
         {coupons.length === 0 ? (
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-            <span className="material-symbols-outlined text-5xl text-gray-600 mb-4 block">
-              confirmation_number
-            </span>
-            <p className="text-gray-400 text-lg">No coupons yet</p>
+          <div className="ua-card p-12 text-center animate-fade-up">
+            <Ticket className="w-12 h-12 text-white/20 mx-auto mb-4" />
+            <p className="text-white/50 text-base">No coupons created yet</p>
           </div>
         ) : (
           <div>
             {/* Desktop Table View */}
             <div className="hidden md:block overflow-x-auto">
-              <table className="w-full border border-white/15 rounded-xl overflow-hidden">
+              <table className="w-full border border-white/[0.08] rounded-xl overflow-hidden ua-card">
                 <thead>
-                  <tr className="bg-white/10">
-                    <th className="p-3 text-left text-sm font-semibold">Code</th>
-                    <th className="p-3 text-left text-sm font-semibold">Discount</th>
-                    <th className="p-3 text-left text-sm font-semibold">Uses Left</th>
-                    <th className="p-3 text-center text-sm font-semibold">Status</th>
-                    <th className="p-3 text-center text-sm font-semibold">
+                  <tr className="bg-white/[0.04] border-b border-white/[0.06]">
+                    <th className="p-3.5 text-left text-xs font-semibold text-white/50 uppercase tracking-wider">Code</th>
+                    <th className="p-3.5 text-left text-xs font-semibold text-white/50 uppercase tracking-wider">Discount</th>
+                    <th className="p-3.5 text-left text-xs font-semibold text-white/50 uppercase tracking-wider">Uses Left</th>
+                    <th className="p-3.5 text-center text-xs font-semibold text-white/50 uppercase tracking-wider">Status</th>
+                    <th className="p-3.5 text-center text-xs font-semibold text-white/50 uppercase tracking-wider">
                       <span className="text-amber-400">⭐ Featured</span>
                     </th>
-                    <th className="p-3 text-center text-sm font-semibold">Actions</th>
+                    <th className="p-3.5 text-center text-xs font-semibold text-white/50 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-white/[0.06]">
                   {coupons.map((c) => (
-                    <tr key={c._id} className="border-t border-white/10 hover:bg-white/5 transition">
-                      <td className="p-3">
-                        <span className="font-mono font-bold text-white tracking-wider">{c.code}</span>
+                    <tr key={c._id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-3.5">
+                        <span className="font-mono font-bold text-white text-sm tracking-wider">{c.code}</span>
                       </td>
-                      <td className="p-3">
-                        <span className="text-green-400 font-bold">
+                      <td className="p-3.5">
+                        <span className="text-emerald-400 font-bold text-sm">
                           {c.type === "percent" ? `${c.value}%` : `₹${c.value}`}
                         </span>
-                        <span className="text-gray-500 text-xs ml-1">
+                        <span className="text-white/30 text-xs ml-1">
                           ({c.type === "percent" ? "percent" : "flat"})
                         </span>
                       </td>
-                      <td className="p-3 text-gray-300">
+                      <td className="p-3.5 text-white/70 text-sm">
                         {c.remainingUses >= 999999 ? "∞" : c.remainingUses}
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3.5 text-center">
                         <button
                           onClick={() => toggleCoupon(c._id)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                          className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
                             c.active
-                              ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                              : "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                              : "bg-red-500/10 text-red-400 border border-red-500/20"
                           }`}
                         >
                           {c.active ? "Active ✅" : "Inactive 🚫"}
                         </button>
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3.5 text-center">
                         <button
                           onClick={() => toggleFeatured(c._id)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                          className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
                             c.featured
-                              ? "bg-amber-500/30 text-amber-300 ring-2 ring-amber-400/50 hover:bg-amber-500/40"
-                              : "bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300"
+                              ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                              : "bg-white/[0.04] text-white/40 border border-white/[0.06] hover:text-white/70"
                           }`}
                         >
                           {c.featured ? "⭐ Featured" : "Set Featured"}
                         </button>
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3.5 text-center">
                         <button
                           onClick={() => deleteCoupon(c._id)}
-                          className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
+                          className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
                           title="Delete"
                         >
-                          <span className="material-symbols-outlined text-red-400 text-base">delete</span>
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
                     </tr>
@@ -244,57 +260,54 @@ const ManageCoupons = () => {
               {coupons.map((c) => (
                 <div
                   key={c._id}
-                  className={`bg-white/5 border rounded-2xl p-4 space-y-3.5 transition ${
-                    c.featured ? "border-amber-500/45 shadow-[0_0_15px_rgba(245,158,11,0.1)]" : "border-white/10"
+                  className={`ua-card p-4 space-y-3.5 transition-all ${
+                    c.featured ? "border-amber-500/40 shadow-lg shadow-amber-500/10" : ""
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-white tracking-wider text-base">
                       {c.code}
                     </span>
-                    <span className="text-green-400 font-extrabold text-sm bg-green-500/10 px-2 py-0.5 rounded">
+                    <span className="text-emerald-400 font-extrabold text-sm bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                       {c.type === "percent" ? `${c.value}% OFF` : `₹${c.value} OFF`}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center text-xs text-gray-400 border-t border-white/5 pt-2">
-                    <span>Discount Type: <strong className="text-gray-200">{c.type === "percent" ? "Percentage" : "Flat Amount"}</strong></span>
-                    <span>Uses Left: <strong className="text-gray-200">{c.remainingUses >= 999999 ? "Unlimited" : c.remainingUses}</strong></span>
+                  <div className="flex justify-between items-center text-xs text-white/40 border-t border-white/[0.06] pt-2.5">
+                    <span>Type: <strong className="text-white/70">{c.type === "percent" ? "Percentage" : "Flat Amount"}</strong></span>
+                    <span>Uses Left: <strong className="text-white/70">{c.remainingUses >= 999999 ? "Unlimited" : c.remainingUses}</strong></span>
                   </div>
 
-                  <div className="flex items-center gap-2 pt-1.5">
-                    {/* Status Toggle */}
+                  <div className="flex items-center gap-2 pt-1">
                     <button
                       onClick={() => toggleCoupon(c._id)}
-                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition ${
+                      className={`flex-1 py-2 rounded-xl text-xs font-semibold transition ${
                         c.active
-                          ? "bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30"
-                          : "bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30"
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          : "bg-red-500/10 text-red-400 border border-red-500/20"
                       }`}
                     >
                       {c.active ? "Active ✅" : "Inactive 🚫"}
                     </button>
 
-                    {/* Featured Toggle */}
                     <button
                       onClick={() => toggleFeatured(c._id)}
-                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 ${
+                      className={`flex-1 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1 ${
                         c.featured
-                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30"
-                          : "bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 hover:text-gray-300"
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                          : "bg-white/[0.04] text-white/40 border border-white/[0.06]"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-xs">grade</span>
+                      <Star className="w-3.5 h-3.5" />
                       {c.featured ? "Featured" : "Feature"}
                     </button>
 
-                    {/* Delete Action */}
                     <button
                       onClick={() => deleteCoupon(c._id)}
-                      className="px-3 py-2 rounded-lg bg-red-500/20 border border-red-500/30 hover:bg-red-500/30 transition text-red-400 flex items-center justify-center"
+                      className="p-2 rounded-xl text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors"
                       title="Delete"
                     >
-                      <span className="material-symbols-outlined text-sm">delete</span>
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -304,10 +317,10 @@ const ManageCoupons = () => {
         )}
 
         {/* Info box */}
-        <div className="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
-          <p className="text-amber-300 text-sm">
-            <span className="font-bold">⭐ Featured Coupon:</span> The featured coupon appears
-            automatically on the plan selection page as a promotional banner, and pre-fills on the
+        <div className="mt-6 bg-[#7C3AED]/10 border border-[#7C3AED]/20 rounded-xl p-4">
+          <p className="text-[#22D3EE] text-xs leading-relaxed">
+            <strong className="text-white">⭐ Featured Coupon Info:</strong> The featured coupon appears
+            automatically on the plan selection page as a promotional banner and pre-fills on the
             payment page. Only ONE coupon can be featured at a time.
           </p>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import qrImg from "../assets/GooglePay_QR.png";
+import { Tag, Check, CheckCircle2, Lock, Clock, ShieldCheck, QrCode, Smartphone, UploadCloud, X, CreditCard, Sparkles, Loader2 } from "lucide-react";
 
 const API = import.meta.env.VITE_API_URL || "";
 const UPI_ID = import.meta.env.VITE_UPI_ID || "urbanastro@paytm";
@@ -201,28 +202,35 @@ const Payment = () => {
   const upiIntentLink = `upi://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`;
 
   return (
-    <div className="min-h-screen bg-[#030014] text-white pt-24 md:pt-28 pb-12 relative overflow-hidden">
-      {/* Background Starfield effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/20 via-transparent to-transparent pointer-events-none z-0"></div>
+    <div className="min-h-screen text-white pt-24 md:pt-28 pb-12 relative overflow-hidden font-display">
+      {/* ── Glow Blobs ───────────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#7C3AED]/8 blur-[120px]" />
+      </div>
 
       <div className="relative z-10 w-full max-w-lg mx-auto px-4">
         {/* Step Progress */}
-        <div className="text-center mb-6">
-          <p className="text-sm text-gray-400">Step 5 of 5</p>
-          <div className="w-full bg-gray-800 rounded-full h-1.5 mt-1">
-            <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "100%" }}></div>
+        <div className="w-full space-y-2 mb-6">
+          <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-widest text-white/40">
+            <span>Checkout</span>
+            <span className="text-[#7C3AED]">Final Step</span>
+          </div>
+          <div className="w-full bg-white/[0.08] rounded-full h-1.5 mt-1">
+            <div className="bg-[#7C3AED] h-1.5 rounded-full transition-all duration-500" style={{ width: "100%" }}></div>
           </div>
         </div>
 
         {/* Card Container */}
-        <div className="bg-white/10 dark:bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.6)] p-6">
-          <h1 className="text-2xl font-bold text-center mb-1 text-white">Checkout & Pay</h1>
-          <p className="text-center text-gray-400 text-sm mb-6">{planName} Plan selected</p>
+        <div className="ua-card p-6 sm:p-8 animate-fade-up">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-center mb-1 text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Checkout & <span className="text-[#7C3AED]">Pay</span>
+          </h1>
+          <p className="text-center text-white/50 text-sm mb-6"><strong className="text-white">{planName}</strong> Plan selected</p>
 
           <div className="space-y-6">
             {/* Promo Code Input & Logic */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
+              <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-2">
                 Have a Promo Code?
               </label>
               <div className="flex gap-2">
@@ -232,37 +240,37 @@ const Payment = () => {
                   onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
                   placeholder="e.g. RAJU50, URBAN200"
                   disabled={!!appliedCoupon}
-                  className="flex-1 bg-black/30 border border-white/15 rounded-lg px-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm h-11"
+                  className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 text-white placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all text-sm h-11"
                 />
                 {appliedCoupon ? (
                   <button
                     onClick={handleRemoveCoupon}
-                    className="bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 px-4 py-2.5 rounded-lg text-sm font-bold border border-red-500/30 transition-all whitespace-nowrap"
+                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-500/20 transition-all whitespace-nowrap"
                   >
                     Remove
                   </button>
                 ) : (
                   <button
                     onClick={() => applyCoupon()}
-                    className="bg-blue-500 hover:bg-blue-600 px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
+                    className="ua-btn-primary py-2.5 text-sm"
                   >
                     Apply
                   </button>
                 )}
               </div>
               {/* Promo validation feedback alerts */}
-              {couponError && <p className="text-xs text-red-400 mt-1.5 font-medium">❌ {couponError}</p>}
-              {couponSuccess && <p className="text-xs text-green-400 mt-1.5 font-medium">✅ {couponSuccess}</p>}
+              {couponError && <p className="text-xs text-red-400 mt-2 font-medium">❌ {couponError}</p>}
+              {couponSuccess && <p className="text-xs text-emerald-400 mt-2 font-medium">✅ {couponSuccess}</p>}
 
               {/* Quick Featured Coupon Selector Chip */}
               {featuredCoupon && !appliedCoupon && (
                 <button
                   onClick={() => applyCoupon(featuredCoupon.code)}
-                  className="mt-3 flex items-center justify-between w-full bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-300 text-xs px-3.5 py-2.5 rounded-lg transition-all"
+                  className="mt-3 flex items-center justify-between w-full bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 text-emerald-300 text-xs px-3.5 py-2.5 rounded-xl transition-all"
                 >
                   <span className="font-semibold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-sm">redeem</span>
-                    🎁 Apply featured coupon {featuredCoupon.code} to save ₹{featuredCoupon.value}
+                    <Tag className="w-3.5 h-3.5" />
+                    Apply featured coupon <strong>{featuredCoupon.code}</strong> to save ₹{featuredCoupon.value}
                   </span>
                   <span className="underline font-bold">Apply</span>
                 </button>
@@ -270,38 +278,38 @@ const Payment = () => {
             </div>
 
             {/* Price Overview Table */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-2.5">
-              <div className="flex justify-between items-center text-sm text-gray-300">
+            <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl p-4 space-y-2.5">
+              <div className="flex justify-between items-center text-sm text-white/60">
                 <span>Selected Plan: <strong className="text-white font-medium">{planName}</strong></span>
                 <span className="font-semibold text-white">₹{baseAmount}</span>
               </div>
               {appliedCoupon && (
-                <div className="flex justify-between items-center text-sm text-green-400">
+                <div className="flex justify-between items-center text-sm text-emerald-400">
                   <span>Coupon Discount ({appliedCoupon})</span>
                   <span>- ₹{discount}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center border-t border-white/10 pt-2.5 text-base sm:text-lg">
+              <div className="flex justify-between items-center border-t border-white/[0.06] pt-2.5 text-base sm:text-lg">
                 <span className="font-semibold">Total Payable</span>
-                <span className="font-extrabold text-blue-400">₹{finalAmount}</span>
+                <span className="font-extrabold text-[#22D3EE]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>₹{finalAmount}</span>
               </div>
             </div>
 
             {finalAmount === 0 ? (
-              <form onSubmit={handleVerifyPayment} className="space-y-4 pt-4 border-t border-white/10">
+              <form onSubmit={handleVerifyPayment} className="space-y-4 pt-4 border-t border-white/[0.06]">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-extrabold rounded-xl text-lg shadow-[0_4px_20px_rgba(59,130,246,0.3)] transition-all duration-300 hover:scale-[1.01] flex items-center justify-center gap-2 text-center"
+                  className="w-full h-14 ua-btn-primary justify-center text-lg shadow-lg shadow-[#7C3AED]/25"
                 >
                   {loading ? (
                     <>
-                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                      <Loader2 className="w-5 h-5 animate-spin" />
                       Confirming Order...
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-base">check_circle</span>
+                      <CheckCircle2 className="w-5 h-5" />
                       Confirm & Submit Booking
                     </>
                   )}
@@ -313,35 +321,35 @@ const Payment = () => {
                 <div className="space-y-3.5">
                   {/iPad|iPhone|iPod/.test(navigator.userAgent) ? (
                     <div className="space-y-2">
-                      <p className="text-xs font-semibold text-gray-300 mb-1.5 text-center">📱 Select your UPI App (For iPhone users):</p>
+                      <p className="text-xs font-semibold text-white/50 mb-1.5 text-center">📱 Select your UPI App (For iPhone users):</p>
                       <div className="grid grid-cols-3 gap-2">
                         <a
                           href={`phonepe://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                          className="flex flex-col items-center justify-center py-3 bg-purple-600/20 hover:bg-purple-600/35 border border-purple-500/30 rounded-xl transition-all text-center text-xs font-bold text-purple-300"
+                          className="flex flex-col items-center justify-center py-3 bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 border border-[#7C3AED]/30 rounded-xl transition-all text-center text-xs font-bold text-white/80"
                         >
-                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          <Smartphone className="w-4 h-4 mb-1 text-[#7C3AED]" />
                           PhonePe
                         </a>
                         <a
                           href={`gpay://upi/pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                          className="flex flex-col items-center justify-center py-3 bg-blue-600/20 hover:bg-blue-600/35 border border-blue-500/30 rounded-xl transition-all text-center text-xs font-bold text-blue-300"
+                          className="flex flex-col items-center justify-center py-3 bg-[#22D3EE]/10 hover:bg-[#22D3EE]/20 border border-[#22D3EE]/30 rounded-xl transition-all text-center text-xs font-bold text-white/80"
                         >
-                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          <Smartphone className="w-4 h-4 mb-1 text-[#22D3EE]" />
                           GPay
                         </a>
                         <a
                           href={`paytmmp://pay?pa=${UPI_ID}&pn=UrbanAstro&am=${finalAmount}&cu=INR`}
-                          className="flex flex-col items-center justify-center py-3 bg-sky-600/20 hover:bg-sky-600/35 border border-sky-500/30 rounded-xl transition-all text-center text-xs font-bold text-sky-300"
+                          className="flex flex-col items-center justify-center py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-xl transition-all text-center text-xs font-bold text-white/80"
                         >
-                          <span className="material-symbols-outlined text-lg mb-1">payments</span>
+                          <Smartphone className="w-4 h-4 mb-1 text-blue-400" />
                           Paytm
                         </a>
                       </div>
                       <a
                         href={upiIntentLink}
-                        className="flex items-center justify-center gap-2 w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all text-center mt-2"
+                        className="flex items-center justify-center gap-2 w-full py-3 ua-btn-ghost text-sm text-center mt-2"
                       >
-                        <span className="material-symbols-outlined text-sm">smartphone</span>
+                        <Smartphone className="w-4 h-4" />
                         Other UPI / WhatsApp Pay
                       </a>
                     </div>
@@ -349,12 +357,12 @@ const Payment = () => {
                     <>
                       <a
                         href={upiIntentLink}
-                        className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-extrabold rounded-xl text-lg shadow-[0_4px_20px_rgba(16,185,129,0.3)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_4px_25px_rgba(16,185,129,0.4)] text-center animate-pulse"
+                        className="flex items-center justify-center gap-2.5 w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold rounded-xl text-lg shadow-lg shadow-emerald-500/25 transition-all duration-300 hover:scale-[1.01] text-center"
                       >
-                        <span className="material-symbols-outlined">smartphone</span>
+                        <Smartphone className="w-5 h-5" />
                         Pay ₹{finalAmount} via UPI App
                       </a>
-                      <p className="text-[11px] sm:text-xs text-center text-gray-400">
+                      <p className="text-xs text-center text-white/40">
                         📱 Recommended for mobile users (Opens GPay, PhonePe, Paytm, BHIM directly).
                       </p>
                     </>
@@ -366,28 +374,28 @@ const Payment = () => {
                   <button
                     type="button"
                     onClick={() => setShowQR(!showQR)}
-                    className="w-full py-3 bg-white/5 border border-white/15 hover:bg-white/10 text-gray-200 hover:text-white font-bold rounded-xl text-sm transition-all text-center flex items-center justify-center gap-2"
+                    className="w-full py-3 ua-btn-ghost justify-center text-sm"
                   >
-                    <span className="material-symbols-outlined text-sm">qr_code_2</span>
+                    <QrCode className="w-4 h-4" />
                     {showQR ? "Hide QR Code" : "Pay via QR (Preferred for desktop/laptop users)"}
                   </button>
                   
                   {showQR && (
-                    <div className="flex flex-col items-center justify-center p-5 border border-white/10 bg-black/20 rounded-xl transition-all duration-300">
-                      <p className="text-xs font-semibold text-gray-400 mb-3">Scan with any UPI App on your phone</p>
-                      <img src={qrImg} alt="UPI Payment QR" className="w-44 h-44 object-contain rounded-lg border border-white/10 bg-white p-2 shadow-lg" />
-                      <p className="text-sm font-bold text-white mt-3">Pay ₹{finalAmount}</p>
+                    <div className="flex flex-col items-center justify-center p-5 border border-white/[0.08] bg-white/[0.02] rounded-xl transition-all duration-300">
+                      <p className="text-xs font-semibold text-white/50 mb-3">Scan with any UPI App on your phone</p>
+                      <img src={qrImg} alt="UPI Payment QR" className="w-44 h-44 object-contain rounded-xl border border-white/10 bg-white p-2 shadow-lg" />
+                      <p className="text-base font-bold text-white mt-3">Pay ₹{finalAmount}</p>
                     </div>
                   )}
                 </div>
 
                 {/* I've Paid action button to show verification details */}
                 {!showVerification && (
-                  <div className="border-t border-white/10 pt-4 text-center">
+                  <div className="border-t border-white/[0.06] pt-4 text-center">
                     <button
                       type="button"
                       onClick={() => setShowVerification(true)}
-                      className="px-6 py-3 bg-blue-500/20 hover:bg-blue-500/35 border border-blue-500/40 text-blue-400 hover:text-blue-300 font-bold rounded-xl text-sm transition-all"
+                      className="px-6 py-3 bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 border border-[#7C3AED]/30 text-[#22D3EE] font-bold rounded-xl text-sm transition-all"
                     >
                       👉 Click here after paying (I've Paid)
                     </button>
@@ -396,15 +404,15 @@ const Payment = () => {
 
                 {/* UTR & Screenshot Verification Form (Appears when user clicks "I've Paid") */}
                 {showVerification && (
-                  <form onSubmit={handleVerifyPayment} className="border-t border-white/10 pt-5 space-y-4 transition-all duration-500">
-                    <h3 className="text-base font-bold text-white flex items-center gap-2">
-                      <span className="material-symbols-outlined text-blue-400">verified_user</span>
+                  <form onSubmit={handleVerifyPayment} className="border-t border-white/[0.06] pt-5 space-y-4 transition-all duration-500">
+                    <h3 className="text-base font-bold text-white flex items-center gap-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                      <ShieldCheck className="w-5 h-5 text-[#22D3EE]" />
                       Verify Payment (After Paying)
                     </h3>
                     
                     {/* UTR Input */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-400 mb-1">
+                      <label className="block text-xs font-semibold text-white/50 uppercase tracking-wider mb-1.5">
                         12-Digit Transaction ID / UTR Number *
                       </label>
                       <input
@@ -413,36 +421,36 @@ const Payment = () => {
                         onChange={(e) => setUtrValue(e.target.value.replace(/[^0-9]/g, "").substring(0, 12))}
                         placeholder="Enter 12-digit payment reference number"
                         required
-                        className="w-full h-11 px-4 bg-black/30 border border-white/15 rounded-lg text-white font-mono placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
+                        className="w-full h-11 px-4 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white font-mono placeholder-white/25 focus:border-[#7C3AED]/50 focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all text-sm"
                       />
                     </div>
 
                     {/* Payment Screenshot File Selector */}
                     <div>
-                      <label className="block text-xs font-semibold text-gray-400 mb-1">
+                      <label className="block text-xs font-semibold text-white/50 uppercase tracking-wider mb-1.5">
                         Upload Payment Screenshot *
                       </label>
-                      <div className="flex flex-col items-center justify-center bg-black/30 border border-dashed border-white/20 rounded-lg p-4 transition hover:border-white/40 relative">
+                      <div className="flex flex-col items-center justify-center bg-white/[0.04] border border-dashed border-white/[0.15] rounded-xl p-4 transition hover:border-white/30 relative">
                         {screenshotPreview ? (
                           <div className="w-full flex items-center gap-3">
-                            <img src={screenshotPreview} alt="Screenshot Preview" className="w-12 h-12 rounded object-cover border border-white/25" />
+                            <img src={screenshotPreview} alt="Screenshot Preview" className="w-12 h-12 rounded-lg object-cover border border-white/25" />
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-bold text-white truncate">{screenshotFile?.name}</p>
-                              <p className="text-[10px] text-gray-500">{(screenshotFile?.size / 1024).toFixed(1)} KB</p>
+                              <p className="text-[10px] text-white/40">{(screenshotFile?.size / 1024).toFixed(1)} KB</p>
                             </div>
                             <button
                               type="button"
                               onClick={() => { setScreenshotFile(null); setScreenshotPreview(null); }}
-                              className="text-xs text-red-400 underline font-semibold"
+                              className="text-xs text-red-400 hover:text-red-300 font-semibold"
                             >
                               Remove
                             </button>
                           </div>
                         ) : (
-                          <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                            <span className="material-symbols-outlined text-gray-400 text-2xl mb-1">image</span>
-                            <span className="text-xs font-semibold text-gray-300">Choose Screenshot Image</span>
-                            <span className="text-[10px] text-gray-500 mt-0.5">JPEG, PNG, or WebP</span>
+                          <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer py-2">
+                            <UploadCloud className="w-6 h-6 text-white/40 mb-1" />
+                            <span className="text-xs font-semibold text-white/70">Choose Screenshot Image</span>
+                            <span className="text-[10px] text-white/40 mt-0.5">JPEG, PNG, or WebP</span>
                             <input
                               type="file"
                               accept="image/*"
@@ -459,16 +467,16 @@ const Payment = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 flex items-center justify-center gap-2 text-sm"
+                      className="w-full h-12 ua-btn-primary justify-center text-sm shadow-lg shadow-[#7C3AED]/25 disabled:opacity-50"
                     >
                       {loading ? (
                         <>
-                          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                          <Loader2 className="w-4 h-4 animate-spin" />
                           Submitting Proof...
                         </>
                       ) : (
                         <>
-                          <span className="material-symbols-outlined text-sm">cloud_upload</span>
+                          <UploadCloud className="w-4 h-4" />
                           Submit Verification Details
                         </>
                       )}

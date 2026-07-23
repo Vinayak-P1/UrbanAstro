@@ -77,7 +77,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main id="main-content">
+      <main id="main-content" className="pt-16">
         <Routes>
           {/* 🌐 Public Routes */}
           <Route path="/" element={<Home />} />

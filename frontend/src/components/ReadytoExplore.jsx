@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Sparkles, ChevronRight } from "lucide-react";
 
 const ReadyToExplore = () => {
   const { user } = useContext(AuthContext);
@@ -15,17 +16,43 @@ const ReadyToExplore = () => {
   };
 
   return (
-    <section className="pt-12 pb-20 px-6 bg-background-light dark:bg-background-dark text-center">
-      <div className="max-w-3xl mx-auto flex flex-col items-center gap-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-white">
-          Ready to Know Your Future?
-        </h2>
-        <button
-          onClick={handleConsultationClick}
-          className="btn-shine inline-block bg-blue-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-[0_0_15px_rgba(0,123,255,0.5)] hover:shadow-[0_0_25px_rgba(0,123,255,0.8)] transition-all duration-300"
-        >
-          Reveal Your Celestial Path
-        </button>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+      <div className="animate-fade-up">
+        <div className="ua-card p-10 sm:p-12 text-center relative overflow-hidden">
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#7C3AED]/10 to-[#22D3EE]/5 pointer-events-none rounded-[20px]" />
+
+          <div className="relative z-10">
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            >
+              Ready to Know
+              <br />
+              <span className="text-[#7C3AED]">Your Future?</span>
+            </h2>
+            <p className="text-white/40 mb-8 max-w-md mx-auto">
+              Start with a personalized consultation. Expert astrologers are
+              ready to guide you.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button
+                onClick={handleConsultationClick}
+                className="ua-btn-primary text-base px-8 py-4"
+              >
+                <Sparkles className="w-4 h-4" />
+                Reveal Your Celestial Path
+              </button>
+              <button
+                onClick={() => navigate("/astrologers")}
+                className="ua-btn-ghost text-base px-8 py-4"
+              >
+                Browse Experts
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
