@@ -97,16 +97,16 @@ const HeroSection = () => {
       </div>
 
       {/* ── Stats Row ────────────────────────────────────────────────── */}
-      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-[#F59E0B]/20 rounded-2xl overflow-hidden bg-[#F59E0B]/10 shadow-lg shadow-black/40 animate-fade-up animate-fade-up-d2">
+      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-px mt-20 w-full max-w-3xl border border-[#F59E0B]/30 rounded-2xl overflow-hidden bg-[#F59E0B]/10 shadow-lg shadow-black/40 animate-fade-up animate-fade-up-d2">
         {statsList.map((s) => (
-          <div key={s.label} className="bg-[#050816] px-6 py-5 text-center">
+          <div key={s.label} className="bg-[#0b1022]/90 backdrop-blur-md px-6 py-5 text-center">
             <div
               className="text-2xl sm:text-3xl font-bold text-white"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               {s.value}
             </div>
-            <div className="text-xs text-white/40 mt-1 font-medium">{s.label}</div>
+            <div className="text-xs text-[#F59E0B]/80 mt-1 font-semibold">{s.label}</div>
           </div>
         ))}
       </div>
