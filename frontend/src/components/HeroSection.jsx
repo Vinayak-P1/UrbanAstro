@@ -70,8 +70,8 @@ const HeroSection = () => {
 
         {/* Hero Headline */}
         <h1
-          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1.04] tracking-tight mb-8"
-          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white leading-[1.02] tracking-tight mb-8 font-hero-serif"
+          style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
         >
           Unlock Your{" "}
           <span className="bg-gradient-to-r from-[#A78BFA] via-[#7C3AED] to-[#E8C470] bg-clip-text text-transparent">

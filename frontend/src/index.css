@@ -33,6 +33,15 @@
   --ua-text-muted:    rgba(255, 255, 255, 0.48);
   --ua-text:          var(--ua-text-primary);
   --ua-radius:        20px;
+
+  /* Typography System Tokens */
+  --ua-font-serif:    'Cormorant Garamond', Georgia, serif;
+  --ua-font-heading:  'Plus Jakarta Sans', sans-serif;
+  --ua-font-body:     'Inter', sans-serif;
+}
+
+.font-hero-serif {
+  font-family: var(--ua-font-serif) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
