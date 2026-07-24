@@ -70,7 +70,7 @@ const HeroSection = () => {
       {/* ── Main Hero Content ────────────────────────────────────────── */}
       <div className="relative z-10 max-w-5xl mx-auto animate-fade-up">
         {/* Divine Celestial Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md mb-8 shadow-lg shadow-[#D4AF37]/5">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md mb-10 shadow-lg shadow-[#D4AF37]/5">
           <Sparkles className="w-4 h-4 text-[#D4AF37] animate-pulse" />
           <span className="text-xs font-semibold tracking-wider text-[#E8C470] uppercase">
             Backed by Ancient Vedic Science • Built for 2026
@@ -79,17 +79,17 @@ const HeroSection = () => {
 
         {/* Hero Headline */}
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white leading-[1.02] tracking-tight mb-8 font-hero-serif"
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] font-bold text-white leading-[1.10] tracking-tight mb-8 font-hero-serif"
           style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
         >
           Unlock Your{" "}
-          <span className="bg-gradient-to-r from-[#A78BFA] via-[#7C3AED] to-[#E8C470] bg-clip-text text-transparent">
+          <span className="inline-block bg-gradient-to-r from-[#A78BFA] via-[#7C3AED] to-[#E8C470] bg-clip-text text-transparent">
             Future Clarity.
           </span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-12 font-light tracking-wide">
+        <p className="mt-6 text-base sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-12 font-light tracking-wide">
           Direct 1-on-1 guidance on career, love, health, wealth & marriage from verified veteran astrologers.
         </p>
 
