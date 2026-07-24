@@ -58,8 +58,8 @@ const HeroSection = () => {
         <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-[#D4AF37]/10 blur-[120px]" />
       </div>
 
-      {/* ── Rotating Golden Celestial Zodiac Compass Wheel ───────────── */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[55%] w-[500px] sm:w-[620px] md:w-[720px] aspect-square pointer-events-none z-0 opacity-[0.35] select-none">
+      {/* ── Rotating Golden Celestial Zodiac Compass Wheel (Ambient Background Anchor) ── */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[42%] w-[420px] sm:w-[520px] md:w-[600px] aspect-square pointer-events-none z-0 opacity-[0.16] select-none">
         <img
           src="/zodiac_wheel.png"
           alt="Zodiac Compass Wheel"
