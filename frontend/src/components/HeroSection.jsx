@@ -69,7 +69,7 @@ const HeroSection = () => {
       {/* ── Cohesive Hero Content Block ──────────────────────────────────────── */}
       <div className="relative z-10 max-w-5xl mx-auto animate-fade-up flex flex-col items-center justify-center">
         {/* Divine Celestial Pill Badge (Just above Zodiac wheel top rim) */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md mt-2 sm:mt-0 mb-6 sm:mb-8 shadow-lg shadow-[#D4AF37]/5">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md -mt-4 sm:mt-0 mb-6 sm:mb-8 shadow-lg shadow-[#D4AF37]/5">
           <Sparkles className="w-4 h-4 text-[#D4AF37] animate-pulse" />
           <span className="text-xs font-semibold tracking-wider text-[#E8C470] uppercase">
             Backed by Ancient Vedic Science • Built for 2026
